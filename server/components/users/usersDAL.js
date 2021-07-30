@@ -27,12 +27,29 @@ class usersDAL {
 
     static async findFriend(id) {
         console.log("\t\tUsersDAL@findFriend");
-        return await User.findAll({
+        const user = await User.findOne({
+            where:{
+                id,
+            },
             include: [{
-                model:User,
-                as: 'friend',
+                model: User,
+                as: 'FriendSend',
+                through: {
+                    where: {
+                        status: 1
+                    }
+                }
+            },{
+                model: User,
+                as: 'FriendReceive',
+                through: {
+                    where: {
+                        status: 1
+                    }
+                }
             }],
         })
+        return user;
     }
 
     static async update(updateClause, whereClause) {

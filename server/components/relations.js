@@ -2,8 +2,8 @@ const User = require("./users/users");
 const Room = require('./rooms/rooms')
 const FriendShipRequest = require('./friendship/friendsRequests')
 
-User.belongsToMany(User, { as: 'FriendSend', through: FriendShipRequest, foreignKey: 'senderId' })
-User.belongsToMany(User, { as: 'FriendReceive', through: FriendShipRequest, foreignKey: 'receiverId' })
+User.belongsToMany(User, { as: 'FriendSend', through: FriendShipRequest, foreignKey: 'senderId'})
+User.belongsToMany(User, { as: 'FriendReceive', through: FriendShipRequest, foreignKey: 'receiverId'})
 
 
 
