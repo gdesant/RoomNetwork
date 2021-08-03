@@ -1,7 +1,7 @@
 import axios from 'axios';
 const url =  "http://localhost:5000"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
-axios.defaults.headers.post['Accept'] = 'application/json,text/plain, */*'
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.common['Accept'] = 'application/json,text/plain, */*'
+axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 class UsersService {
     static async getUsers() {
@@ -14,9 +14,9 @@ class UsersService {
         }
     }
 
-    static async getUsersStartWith(name: string) {
+    static async getUsersStartWith(name: string, id: number | string) {
         try {
-            const res = await axios.get( url + "/users/all/sw/" + name);
+            const res = await axios.get( url + "/users/all/sw/" + name + "/" + id);
             console.log(res);
             return res.data
         } catch (err) {
@@ -28,13 +28,24 @@ class UsersService {
 
     static async getUserById(id: number) {
         try {
-            const res = await axios.get(url + "/users/id/" + id)
+            const res = await axios.get(url + "/users/" + id)
             console.log(res.data)
             return res.data
         } catch (err) {
             return err
         }
     }
+
+    static async getDashUserById(id: number) {
+        try {
+            const res = await axios.get(url + "/auth/users/dash/" + id)
+            console.log(res.data)
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
 
     static async getUserByToken(token: string) {
         try {
@@ -48,7 +59,7 @@ class UsersService {
 
     static async login(user: {username: string, password: string}) {
         try {
-            const res = await axios.post(url + "/login" , {
+            const res = await axios.post(url + "/auth/login" , {
                 username: user.username,
                 password: user.password
             })
@@ -59,9 +70,49 @@ class UsersService {
         }
     }
 
+    static async getFriendsRequestBySenderId(id: string | number) {
+        try {
+            const res = await axios.get(url + "/auth/users/" + id + '/friendsent')
+            console.log(res)
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
+    static async getFriendsRequestByReceiverId(id: string | number) {
+        try {
+            const res = await axios.get(url + "/auth/users/" + id + '/friendreceived')
+            console.log(res)
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
+    static async getPendingFriendsRequestByReceiverId(id: string | number) {
+        try {
+            const res = await axios.get(url + "/auth/users/" + id + '/friendreceived/0')
+            console.log(res)
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
+    static async getUserFriends(id: string | number) {
+        try {
+            const res = await axios.get(url + "/auth/users/" + id + '/friends')
+            console.log(res)
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
     static async logout(token: string) {
         try {
-            const res = await axios.post(url + "/logout" , {
+            const res = await axios.post(url + "/auth/logout" , {
                 token: token
             })
             console.log(res)
@@ -73,7 +124,7 @@ class UsersService {
 
     static async register(user: {username: string, email: string, password: string}) {
         try {
-            const res = await axios.post(url + "/register" , {
+            const res = await axios.post(url + "/auth/register" , {
                 username: user.username,
                 email: user.email,
                 password: user.password
@@ -86,11 +137,12 @@ class UsersService {
 
     static async checkToken(token: string) {
         try {
-            const res = await axios.post(url + "/verify" , {
-                token: token
-            })
-            return res.data
+            axios.defaults.headers.common = {'Authorization': `Bearer ` + token}
+            const res = await axios.get(url + "/auth/verify")
+            console.log('CheckToken :' + res)
+            return res.data === true
         } catch (err) {
+            console.log('TokenError : ' + err)
             return false
         }
     }

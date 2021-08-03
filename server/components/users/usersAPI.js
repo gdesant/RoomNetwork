@@ -7,23 +7,18 @@ router.get("/all", async function(req, res) {
     res.send(result);
 });
 
-router.get("/all/sw/:name", async function(req, res) {
-    let result = await usersController.getUsersStartWith(req.params.name);
+router.get("/all/sw/:name/:id", async function(req, res) {
+    let result = await usersController.getUsersStartWith(req.params.name, req.params.id);
     res.send(result);
 });
 
-router.get("/id/:id", async function(req, res) {
-    let result = await usersController.getUserById(req.params.id);
-    res.send(result);
-});
-
-router.get("/id/:id/friend", async function(req, res) {
-    let result = await usersController.getFriend(req.params.id);
+router.get("/:id", async function(req, res) {
+    let result = await usersController.getUserById(req.params.id, ['id', 'username' ,'email']);
     res.send(result);
 });
 
 router.get("/tk/:token", async function(req, res) {
-    let result = await usersController.getUserByToken(req.params.token);
+    let result = await usersController.getUserByToken(req.params.token, ['id', 'username' ,'email']);
     res.send(result);
 });
 

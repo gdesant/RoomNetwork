@@ -152,7 +152,7 @@ export default {
         if (token){
           localStorage.setItem("token", token)
           axios.defaults.headers.post['Authorization'] = 'Bearer ' + token
-          this.$router.push("/dashboard")
+          this.$router.push("/dashboardComponents")
         }else{
           console.log('error: ', response)
         }

@@ -14,9 +14,9 @@ class FriendsService {
         }
     }
 
-    static async getFriendsRequestById(id) {
+    static async getFriendsRequestById(id: string | number) {
         try {
-            const res = await axios.get( url + "/id/" + id);
+            const res = await axios.get( url + "/friends/id/" + id);
             console.log(res);
             return res.data
         } catch (err) {
@@ -24,25 +24,6 @@ class FriendsService {
         }
     }
 
-    static async getFriendsRequestBySenderId(id) {
-        try {
-            const res = await axios.get(url + "/sender/" + id)
-            console.log(res)
-            return res.data
-        } catch (err) {
-            return err
-        }
-    }
-
-    static async getFriendsRequestByReceiverId(id) {
-        try {
-            const res = await axios.get(url + "/receiver/" + id)
-            console.log(res)
-            return res.data
-        } catch (err) {
-            return err
-        }
-    }
 
     static async update(id: number, status: number) {
         try {

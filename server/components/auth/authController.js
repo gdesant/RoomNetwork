@@ -55,7 +55,7 @@ class AuthController {
 
     static async verify(params) {
         const token = params.token
-        console.log("\rAuthController@verify");
+        console.log("\rAuthController@verifyToken: " + token);
         const user = await usersDAL.findOne({token: token})
         if(user) {
             if (jwt.verify(token, process.env.TOKEN_SECRET))

@@ -1,12 +1,47 @@
 const express = require('express');
 const router = express.Router();
-const AuthController = require("./authController");
+const authController = require("./authController");
 const jwt = require('jsonwebtoken')
+const usersController = require("../users/usersController");
+const friendsController = require("../friendship/friendsController");
 
+//Private users data
+router.get("/users/dash/:id", async function(req, res) {
+    let result = await usersController.getUserDashboardById(req.params.id);
+    res.send(result);
+});
+
+router.get("/users/:id", authenticateToken, async function(req, res) {
+    let result = await usersController.getUserById(req.params.id, ['id', 'username' ,'email', 'password']);
+    res.send(result);
+});
+
+router.get("/users/:id/friends", authenticateToken, async function(req, res) {
+    let result = await usersController.getUserFriends(req.params.id);
+    res.send(result);
+});
+
+router.get("/users/:id/friendsent", authenticateToken, async function(req, res) {
+    const result = await friendsController.getUserFriendRequestsSent(req.params.id);
+    res.send(result);
+});
+
+router.get("/users/:id/friendreceived", authenticateToken, async function(req, res) {
+    const result = await friendsController.getUserFriendRequestsReceived(req.params.id);
+    res.send(result);
+});
+
+router.get('/users/:id/friendreceived/:status', authenticateToken, async function(req, res)  {
+    const result = await friendsController.getUserFriendRequestsReceivedbyStatus(req.params.id, req.params.status);
+    res.send(result);
+})
+
+
+//Login/Register api
 router.post("/register", async function(req, res) {
     console.log('Access Register !')
     console.log(req);
-    let result = await AuthController.signup(req.body);
+    let result = await authController.signup(req.body);
     if(result === 400) {
         res.status(result).send('Not enough parameters')
     } else if(result === 409) {
@@ -16,18 +51,12 @@ router.post("/register", async function(req, res) {
     }
 });
 
-
-router.post("/verify", authenticateToken, async function(req, res ) {
-    let result = await AuthController.verify(req.body);
-    if(result === 400) {
-        res.status(result).send('Not enough parameters for verify')
-    } else {
-        res.send(result);
-    }
+router.get("/verify", authenticateToken, async function(req, res ) {
+        res.send(true);
 });
 
 router.post("/logout", authenticateToken, async function(req, res ) {
-    let result = await AuthController.logout(req.body);
+    let result = await authController.logout(req.body);
     if(!result) {
         res.send(false)
     } else {
@@ -37,7 +66,7 @@ router.post("/logout", authenticateToken, async function(req, res ) {
 
 router.post("/login", async function(req, res) {
     console.log('Access Login !')
-    let result = await AuthController.login(req.body);
+    let result = await authController.login(req.body);
     if (result)
         res.send(result);
     else
@@ -45,14 +74,15 @@ router.post("/login", async function(req, res) {
 });
 
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'] ? req.headers['authorization'] : null
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]
-
+    console.log("AuthoToken: " + token)
     if (token == null || token == undefined) return res.sendStatus(401)
-    console.log('token == ' + token)
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        console.log(err)
-        if (err) return res.sendStatus(403)
+        if (err) {
+            console.log(err)
+            return res.sendStatus(403)
+        }
         req.user = user
         next()
     })

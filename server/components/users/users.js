@@ -8,7 +8,7 @@ const User = process.sequelize.define('user', {
     email: {
         type: process.Sequelize.STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
     },
     password: {
         type: process.Sequelize.STRING,
@@ -20,8 +20,13 @@ const User = process.sequelize.define('user', {
         unique: true
     },
 }, {
-    timestamps: true
-});
+    timestamps: true,
+    scopes: {
+        safeUser: {
+            attributes: { exclude: ['password', 'token', 'createdAt', 'updatedAt'] },
+        }
+    }
+},);
 
 User.sync({
     force: false

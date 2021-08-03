@@ -1,6 +1,65 @@
-const {FriendShipRequest} = require("../relations");
+const {Op} = require("sequelize");
+const {FriendShipRequest, User} = require("../relations");
 
 class friendsRequestDAL{
+
+    static async getUserFriendRequestsSent(id) {
+        console.log("\t\tUsersDAL@findFriend");
+        const user = await User.findOne({
+            where:{
+                id,
+            },
+            include: [{
+                model: User,
+                as: 'FriendSend',
+                attributes: ['id', 'username', 'email'],
+                through: {attributes: [], where: {status: {[Op.not]: 1}}}
+            }],
+            attributes: [],
+        })
+        let result = user.toJSON().FriendSend
+        console.log(result)
+        return {FriendsRequestsSent: result};
+    }
+
+    static async getUserFriendRequestsReceived(id, throughclause) {
+        console.log("\t\tUsersDAL@findFriend");
+        const user = await User.findOne({
+            where:{
+                id,
+            },
+            include: [{
+                model: User,
+                as: 'FriendReceive',
+                attributes: ['id', 'username', 'email'],
+                through: throughclause
+            }],
+            attributes: [],
+        })
+        let result = user.toJSON().FriendReceive
+        console.log(result)
+        return {FriendsRequestsReceived: result};
+    }
+
+    static async getUserHaveLink(id1, id2){
+        const request = await FriendShipRequest.findOne({
+            where: {
+                [Op.and]: [{
+                    receiverId:{
+                        [Op.or]:[id1, id2],
+                    }},{
+                    senderId: {
+                        [Op.or]:[id2, id1],
+                    }
+                }
+                ]}})
+
+        if (request)
+            return request.status
+        else
+            return -1
+    }
+
     static async get() {
         console.log("\t\tFriendsRequestDAL@get");
         return await FriendShipRequest.findAll({});
@@ -34,11 +93,11 @@ class friendsRequestDAL{
         });
     }
 
-    static async create(req) {
+    static async create(sender, receiver) {
         console.log("\t\tFriendsRequestDAL@create");
         return await FriendShipRequest.create({
-            sender: req.user.id,
-            receiver: req.body.receiverId,
+            senderId: sender.id,
+            receiverId: receiver.id,
             status: 0,
         });
     }

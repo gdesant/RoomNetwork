@@ -6,6 +6,5 @@ User.belongsToMany(User, { as: 'FriendSend', through: FriendShipRequest, foreign
 User.belongsToMany(User, { as: 'FriendReceive', through: FriendShipRequest, foreignKey: 'receiverId'})
 
 
-
 module.exports = { User, Room, FriendShipRequest };
 return { User, Room, FriendShipRequest }

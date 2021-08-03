@@ -16,20 +16,32 @@ class FriendsController {
         return fr;
     }
 
-    static async getFriendRequestsByReceiver(id) {
-        console.log("\tUserController@getFriendRequestByReceiver");
-        const fr = await friendsRequestDAL.findAll({receiverId: id});
+    static async getUserFriendRequestsSent(id) {
+        console.log("\tUserController@getUserFriendRequestsSent");
+        const fr = await friendsRequestDAL.getUserFriendRequestsSent(id);
         return fr;
     }
 
-    static async getFriendRequestsBySender(id) {
-        console.log("\tUserController@getFriendRequestBySender");
-        const fr = await friendsRequestDAL.findAll({senderId: id});
+    static async getUserAreLinked(id1, id2){
+        const fr = await friendsRequestDAL.getUserHaveLink(id1, id2);
+        return fr;
+    }
+
+    static async getUserFriendRequestsReceived(id) {
+        console.log("\tUserController@getUserFriendRequestsReiceived");
+        const fr = await friendsRequestDAL.getUserFriendRequestsReceived(id, {where: {status: {[Op.not]: 1}}});
+        return fr;
+    }
+
+    static async getUserFriendRequestsReceivedbyStatus(id, status) {
+        console.log("\tUserController@getUserFriendRequestsReiceived");
+        const fr = await friendsRequestDAL.getUserFriendRequestsReceived(id, {where: {status: status}, attributes: ['id', 'updatedAt']});
         return fr;
     }
 
     static async updateFriendRequest(req){
-        console.log("\tUserController@updateFriendRequest");
+        console.log("\tUserController@updateFriendRequest : ")
+        console.log(req.user)
         const fr = await friendsRequestDAL.update( {status: req.body.status}, {
             id: req.body.id,
             [Op.or]: [{senderId: req.user.id}, {receiverId: req.user.id}]
@@ -80,7 +92,10 @@ class FriendsController {
 
     static async createFriendRequest(req) {
         console.log("\tUserController@createFriendRequest");
-        const fr = await friendsRequestDAL.create(req)
+        const sender = req.user
+        const receiver = await usersDAL.findOne({id : req.body.receiverId}, ["id", "username", "email"])
+        console.log("Create a frienship beetween " + sender.id + " and " + receiver.id + " !")
+        const fr = await friendsRequestDAL.create(sender, receiver)
         return fr
 
     }

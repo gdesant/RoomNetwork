@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
 
     },
     {
-        path: "/dashboard",
+        path: "/dashboardComponents",
         name: "Dashboard",
         component: Dashboard,
         meta: {type: authType.LOGIN},
@@ -56,16 +56,18 @@ router.beforeEach(async (to, from, next) => {
             if (tk) {
                 try {
                     const response = await UsersService.checkToken(tk)
-                    if (response !== false) {
+                    console.log(response)
+                    if (response === true) {
+                        console.log("Token valid redirect to : " + to)
                         return next()
                     } else {
-                        console.log("Token invalid !")
+                        console.log("Token invalid : " + tk)
                         return next({path: "/login"})
                     }
 
                 } catch (err) {
                     console.log('AuthError:', err)
-                    return next({path: '/'})
+                    return next({path: '/login'})
                 }
             } else
                 return next({path: '/login'})
@@ -78,12 +80,11 @@ router.beforeEach(async (to, from, next) => {
             if (tk) {
                 try {
                     const response = await UsersService.checkToken(tk)
-                    if (response !== false) {
+                    if (response === true) {
                         console.log('you are log')
-                        return next("./dashboard")
+                        return next("/dashboardComponents")
                     } else {
-                        console.log("Token invalid !")
-                        localStorage.removeItem("token")
+                        console.log("Token invalid :" + tk)
                         return next()
                     }
 

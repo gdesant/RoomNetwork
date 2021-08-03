@@ -11,19 +11,19 @@
         </div>
     </div>
     <div class="friendsDiv">
-      <FriendList v-if="user !== null" :user="user"/>
+      <FriendDiv v-if="user !== null" :user="user"/>
     </div>
   </div>
 </template>
 
 <script>
-import FriendList from "@/components/dashboard/friendList";
-import ProfileEdit from "@/components/dashboard/profileEdit";
-import RoomsList from "@/components/dashboard/roomsList";
+import FriendDiv from "@/components/dashboardComponents/friendDiv";
+import ProfileEdit from "@/components/dashboardComponents/profileEdit";
+import RoomsList from "@/components/dashboardComponents/roomsList";
 import UsersService from "@/services/UsersService";
 
 export default {
-  components: {RoomsList, ProfileEdit, FriendList},
+  components: {RoomsList, ProfileEdit, FriendDiv},
   data() {
     return {
       user: null,
@@ -36,10 +36,13 @@ export default {
     if (tk) {
       try{
         const user = await UsersService.getUserByToken(tk)
-        if (user)
+        if (user){
           this.user = user
+          console.log(this)
+        }
         else {
           console.log('Error GetUser: ' + user)
+          localStorage.removeItem('token')
           this.$router.push("/login")
         }
 
@@ -56,6 +59,13 @@ export default {
 </script>
 
 <style scoped>
+.buttonDiv{
+  text-align: center;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 100%;
+  color: #B2B1B9;
+}
+
 .dashboardMain{
   margin: 1vh 4vw 1vh 4vw;
   width: 92vw;

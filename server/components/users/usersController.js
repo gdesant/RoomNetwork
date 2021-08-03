@@ -1,41 +1,68 @@
 const usersDAL = require("./usersDAL");
+const friendsRequestDAL = require("../friendship/friendsRequestsDAL");
 
 class UsersController {
     static async getUsers() {
         console.log("\tUserController@getUsers");
         const Users = await usersDAL.get();
-        Users.sort((e1, e2) => e1.email < e2.email);
-        Users.forEach(function (user){user.password=null;user.token =null})
+        Users.sort((e1, e2) => e1.id < e2.id);
         return Users;
     }
 
-    static async getUsersStartWith(name) {
+
+
+    static async getUsersStartWith(name, userId) {
+        Object.size = function(obj) {
+            var size = 0,
+                key;
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) size++;
+            }
+            return size;
+        };
+
         console.log("\tUserController@findStartWith");
-        const Users = await usersDAL.findAllStartWith(name);
-        Users.forEach(function (user){user.password=null;user.token =null})
+
+        const jokes = await usersDAL.findAllStartWith(name)
+        const Users = []
+
+        for(let i = -1; ++i < Object.size(jokes);){
+            let stat = await friendsRequestDAL.getUserHaveLink(userId, jokes[i].id)
+            console.log(stat)
+            if (stat < 0 && jokes[i].id !== userId)
+                Users[Users.length] = jokes[i];
+        }
+
         return Users;
     }
 
-    static async getUserById(id) {
+    static async getUserById(id, attributes) {
         console.log("\tUserController@getUserById");
-        const User = await usersDAL.findOne({id: id});
+        const User = await usersDAL.findOne({id: id}, attributes);
         return User;
         
     }
 
-    static async getFriend(id) {
+    static async getUserDashboardById(id) {
         console.log("\tUserController@getUserById");
-        const User = await usersDAL.findFriend(id);
+        const User = await usersDAL.getUserDashboardById(id);
+        return User;
+
+    }
+
+    static async getUserFriends(id) {
+        console.log("\tUserController@getUserById");
+        const User = await usersDAL.getUserFriends(id);
         return User;
 
     }
 
 
-    static async getUserByToken(token) {
+    static async getUserByToken(token, attributes) {
         console.log("\tUserController@getUserByToken");
         if (token === null)
             return null;
-        const User = await usersDAL.findOne({token: token});
+        const User = await usersDAL.findOne({token: token}, attributes);
         return User;
 
     }

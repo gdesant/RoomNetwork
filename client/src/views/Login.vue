@@ -38,7 +38,6 @@
 
 <script>
 import UsersService from "../services/UsersService"
-import axios from "axios";
 
 export default {
   data() {
@@ -56,9 +55,9 @@ export default {
       try {
         let response = await UsersService.login(this.login)
         let token = response.token
+        console.log("Token : " + response)
         localStorage.setItem("token", token)
-        axios.defaults.headers.post['Authorization'] = 'Bearer ' + token
-        this.$router.push("/dashboard")
+        this.$router.push("/dashboardComponents")
       } catch (err) {
         this.login.error = err.response.data
         console.log(err.response.data)
