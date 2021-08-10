@@ -31,6 +31,8 @@ export default {
       const fr = await UsersService.getPendingFriendsRequestByReceiverId(this.user.id)
       this.friendrequestreceived = fr.FriendsRequestsReceived
 
+      this.emitter.emit("friendListRefresh", this.user.id)
+
       return
     },
     updateFriendRequest: async function (id, status) {

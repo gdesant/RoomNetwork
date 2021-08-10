@@ -1,5 +1,5 @@
 <template >
-  <div  className="friendListDiv">
+  <div class="friendListDiv">
     <ul class="friendList" v-if="friends != null">
       <li v-for="fr in friends" v-bind:key="fr.id"  class="friendrequestBar">
         <div class="friendName" >{{fr.username}}</div>
@@ -22,11 +22,13 @@ export default {
       friends: this.initfriends,
     }
   },
+  async created () {
+    this.emitter.on("friendListRefresh", this.refreshFriends);
+  },
   methods: {
     refreshFriends: async function(){
       const frs = await UsersService.getUserFriends(this.user.id)
       this.friends = frs.Friends
-
       return
     },
   }
@@ -54,8 +56,14 @@ input:focus{
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding-left: 0;
   margin: 0;
+}
+
+.friendList::-webkit-scrollbar{
+  display: none;
 }
 
 .friendrequestBar{
@@ -212,14 +220,6 @@ input:focus{
 .futureFriendsList{
   width: 100%;
   min-height: 85%;
-}
-
-.friendList{
-  width: 100%;
-  list-style: none;
-  padding-left: 0;
-  margin: 2% 0;
-  overflow: hidden;
 }
 
 .noList{

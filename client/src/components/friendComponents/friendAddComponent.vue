@@ -1,5 +1,5 @@
 <template >
-  <div className="FirendAddDiv">
+  <div className="friendAddDiv">
     <div class="inputDiv">
       <input type="text" placeholder="Search ..."  v-model="searchFriend.name" v-on:keydown="toggleLoadfutfriend()" v-on:keyup="refreshFriends(searchFriend.name, $props.user.id)">
     </div>
@@ -85,6 +85,15 @@ export default {
 </script>
 
 <style scoped>
+
+.friendAddDiv{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
 
 input{
   width: 94%;
@@ -180,7 +189,7 @@ input:focus{
 
 .friendBar{
   width: 100%;
-  height: 5vh;
+  height: 6%;
   display: flex;
   flex-direction: row;
   background-color: rgba(178, 177, 185, 0.07);
@@ -193,12 +202,11 @@ input:focus{
 }
 
 .friendName{
- width: 52%;
-  vertical-align: center;
+  width: 52%;
   text-align: left;
   font-family: 'Titillium Web', sans-serif;
   font-weight: 600;
-  font-size: calc(1.3vh + 1.3vw);
+  font-size: 100%;
   color: #B2B1B9;
   padding: 0 4%;
 }
@@ -211,10 +219,14 @@ input:focus{
 .listContainer{
   background-color: transparent;
   border-top: solid 0.3vh white;
-  height: 73vh;
+  height: 100%;
+  width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: scroll;
+}
+.listContainer::-webkit-scrollbar{
+  display: none;
 }
 
 .inputDiv{
@@ -225,15 +237,22 @@ input:focus{
 
 .futureFriendsList{
   width: 100%;
-  min-height: 85%;
+  display: flex;
+  flex-direction: column;
+  min-height: 70%;
+  max-height: 75%;
 }
+
 
 .friendList{
   width: 100%;
-  list-style: none;
+  min-height: 70%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: hidden;
   padding-left: 0;
-  margin: 2% 0;
-  overflow: hidden;
+  margin: 0;
 }
 
 .noList{

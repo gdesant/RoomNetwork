@@ -18,12 +18,13 @@ const {User, Room, FriendShipRequest} = require('./components/relations')
 const users = require("./components/users/usersAPI")
 const rooms = require("./components/rooms/roomsAPI")
 const friends = require("./components/friendship/friendsAPI")
+const chat = require("./components/chat/chatAPI")
 const auth = require("./components/auth/authAPI")
 
 app.use(bodyParser.json());
 app.use(cors());
 
-/*
+
 for(let i = -1; ++i < 200;)
 {
     const user = new User()
@@ -32,7 +33,6 @@ for(let i = -1; ++i < 200;)
     user.email = faker.fake("{{name.lastName}}")
     user.save()
 }
-*/
 
 process.sequelize
 .authenticate()
@@ -48,6 +48,7 @@ process.sequelize
 app.use('/rooms', rooms)
 app.use('/friends', friends)
 app.use('/users', users)
+app.use('/chat', chat)
 app.use('/auth/', auth)
 
 const port = process.env.PORT || 5000;

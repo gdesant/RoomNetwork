@@ -44,7 +44,7 @@ class UsersController {
     }
 
     static async getUserDashboardById(id) {
-        console.log("\tUserController@getUserById");
+        console.log("\tUserController@getUserDashById");
         const User = await usersDAL.getUserDashboardById(id);
         return User;
 

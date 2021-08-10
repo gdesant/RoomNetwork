@@ -57,7 +57,7 @@ export default {
         let token = response.token
         console.log("Token : " + response)
         localStorage.setItem("token", token)
-        this.$router.push("/dashboardComponents")
+        this.$router.push("/dashboardContainers")
       } catch (err) {
         this.login.error = err.response.data
         console.log(err.response.data)

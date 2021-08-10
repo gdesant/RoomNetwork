@@ -35,7 +35,7 @@ import FriendAddComponent from "@/components/friendComponents/friendAddComponent
 
 
 export default {
-  name: "FriendDiv",
+  name: "FriendsListsContainer",
   components: {FriendAddComponent, FriendRequestComponent, FriendListComponent},
   props: {
     user: Object,
@@ -75,9 +75,11 @@ export default {
 
 <style scoped>
 .friendsModal {
-  margin-top: 4%;
-  margin-bottom: 3%;
-  height: 94%;
+  margin: 2% 0;
+  height: 96%;
+  width: 100%;
+  align-self: center;
+  overflow: hidden;
 }
 
 .categoryDiv {
@@ -99,8 +101,8 @@ export default {
 .collapsable {
   overflow: hidden;
   transition: max-height 0.3s ease-out, min-height 0.3s ease-out;
-  min-height: 78vh;
-  max-height: 80vh;
+  min-height: 71vh;
+  max-height: 74vh;
   width: 100%;
   display: flex;
   flex-direction: column;

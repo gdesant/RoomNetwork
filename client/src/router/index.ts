@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
 
     },
     {
-        path: "/dashboardComponents",
+        path: "/dashboard/:scrollView?",
         name: "Dashboard",
         component: Dashboard,
         meta: {type: authType.LOGIN},
@@ -82,7 +82,7 @@ router.beforeEach(async (to, from, next) => {
                     const response = await UsersService.checkToken(tk)
                     if (response === true) {
                         console.log('you are log')
-                        return next("/dashboardComponents")
+                        return next("/dashboard")
                     } else {
                         console.log("Token invalid :" + tk)
                         return next()

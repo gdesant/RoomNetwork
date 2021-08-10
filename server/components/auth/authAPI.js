@@ -76,7 +76,6 @@ router.post("/login", async function(req, res) {
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]
-    console.log("AuthoToken: " + token)
     if (token == null || token == undefined) return res.sendStatus(401)
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {

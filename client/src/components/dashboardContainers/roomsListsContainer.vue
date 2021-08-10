@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "RoomsList",
+  name: "RoomsListsContainer",
   methods: {
     roomsExpander (div) {
         if (!div.classList.contains('collapsed'))

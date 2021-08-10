@@ -7,7 +7,6 @@ class UsersService {
     static async getUsers() {
         try {
             const res = await axios.get( url + "/users/all");
-            console.log(res);
             return res.data
         } catch (err) {
             return err
@@ -17,7 +16,6 @@ class UsersService {
     static async getUsersStartWith(name: string, id: number | string) {
         try {
             const res = await axios.get( url + "/users/all/sw/" + name + "/" + id);
-            console.log(res);
             return res.data
         } catch (err) {
             return err
@@ -29,7 +27,15 @@ class UsersService {
     static async getUserById(id: number) {
         try {
             const res = await axios.get(url + "/users/" + id)
-            console.log(res.data)
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
+    static async getPrivateUserById(id: number | string) {
+        try {
+            const res = await axios.get(url + "/auth/users/" + id)
             return res.data
         } catch (err) {
             return err
@@ -39,7 +45,6 @@ class UsersService {
     static async getDashUserById(id: number) {
         try {
             const res = await axios.get(url + "/auth/users/dash/" + id)
-            console.log(res.data)
             return res.data
         } catch (err) {
             return err
@@ -50,7 +55,6 @@ class UsersService {
     static async getUserByToken(token: string) {
         try {
             const res = await axios.get(url + "/users/tk/" + token)
-            console.log(res.data)
             return res.data
         } catch (err) {
             return err
@@ -63,7 +67,6 @@ class UsersService {
                 username: user.username,
                 password: user.password
             })
-            console.log(res)
             return res.data
         } catch (err) {
             return err
@@ -73,7 +76,6 @@ class UsersService {
     static async getFriendsRequestBySenderId(id: string | number) {
         try {
             const res = await axios.get(url + "/auth/users/" + id + '/friendsent')
-            console.log(res)
             return res.data
         } catch (err) {
             return err
@@ -83,7 +85,6 @@ class UsersService {
     static async getFriendsRequestByReceiverId(id: string | number) {
         try {
             const res = await axios.get(url + "/auth/users/" + id + '/friendreceived')
-            console.log(res)
             return res.data
         } catch (err) {
             return err
@@ -103,7 +104,6 @@ class UsersService {
     static async getUserFriends(id: string | number) {
         try {
             const res = await axios.get(url + "/auth/users/" + id + '/friends')
-            console.log(res)
             return res.data
         } catch (err) {
             return err

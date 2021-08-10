@@ -28,10 +28,5 @@ const User = process.sequelize.define('user', {
     }
 },);
 
-User.sync({
-    force: false
-});
-
-
 module.exports = User
 return User

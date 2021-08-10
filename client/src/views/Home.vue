@@ -29,8 +29,8 @@ export default {
 <style>
 .home{
   margin: 15vh 25vw;
-  width: 50vw;
-  height: 70vh;
+  width: 100vw;
+  height: 100vh;
   background-color: #363537;
   display: flex;
   flex-direction: column;

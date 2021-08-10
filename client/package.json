@@ -12,6 +12,7 @@
         "axios": "^0.21.1",
         "colyseus.js": "^0.14.12",
         "core-js": "^3.6.5",
+        "mitt": "^3.0.0",
         "vue": "^3.0.0",
         "vue-class-component": "^8.0.0-0",
         "vue-router": "^4.0.10",

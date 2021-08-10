@@ -16,7 +16,10 @@
         <div  ref="eye" class="divShow" @click="changePasswordType()"><i class="fas fa-eye eye" style="color:  #ecbfac; position:relative; top: calc(50% - 10px); text-align: center; font-size: calc(1vh + 1.5vw);"></i></div>
       </div>
     </div>
-    <div class="buttonDiv">Reset Password</div><div class="buttonDiv" @click="logoutUser" type="submit ">Logout</div>
+    <div class="buttonDiv">
+      <button class="hoverButton1">Reset Password</button>
+      <button class="hoverButton2" @click="logoutUser" type="submit ">Logout</button>
+    </div>
   </div>
 </template>
 
@@ -24,7 +27,7 @@
 import UsersService from "@/services/UsersService";
 
 export default {
-  name: "ProfileEdit",
+  name: "ProfileContainer",
   props:{
     user: Object,
   },
@@ -66,9 +69,47 @@ export default {
 </script>
 
 <style scoped>
+
+
+.hoverButton1{
+  color: orange;
+  background-size: 100% 200%;
+  border-radius: 0px;
+  background-image: linear-gradient(to bottom, transparent 50%, white 50%);
+  -webkit-transition: background-position 1s;
+  -moz-transition: background-position 1s;
+  transition: background-position 1s;
+}
+
+.hoverButton1:hover {
+  background-position: 0% 100%;
+}
+
+.hoverButton2{
+  color: orange;
+  background-size: 100% 200%;
+  border-radius: 0px;
+  background-image: linear-gradient(to top, white 50%, transparent 50%);
+  -webkit-transition: background-position 1s;
+  -moz-transition: background-position 1s;
+  transition: background-position 1s;
+}
+
+.hoverButton2:hover {
+  background-position: 0 -100%;
+}
+
+@keyframes color-transition
+{
+  0% {color: #ef815c;}
+  100 {color: #363537;}
+}
+
 .profileGrid{
+  background-color: #39393b;
   display: flex;
   flex-direction: column;
+  border-radius: 1vh 1vh;
   grid-gap: 10px;
   width: 100%;
   height: 100%;
@@ -134,13 +175,6 @@ input:active{
 
 .passwordInputField{
   width: 85%;
-}
-
-.buttonDiv{
-  width:40%;
-  background-color: #ef815c;
-  height: 8%;
-  margin-left: 50%;
 }
 
 </style>

@@ -52,9 +52,8 @@ class usersDAL {
         return {Friends: result};
     }
 
-
     static async getUserDashboardById(id) {
-        console.log("\t\tUsersDAL@findFriend");
+        console.log("\t\tUsersDAL@getDashUser");
         const init = await User.findOne({
             where:{
                 id,
@@ -71,14 +70,19 @@ class usersDAL {
                 through: {attributes: ['status', 'id', 'updatedAt']}
             }],
         })
-        let user = {}
-        user.user = init.toJSON()
-        delete user.user.FriendSend
-        delete user.user.FriendReceive
-        user.friendrequestsent = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status == 0);
-        user.friendrequestreceived = init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status == 0);
-        user.friends = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status === 1).concat(init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status === 1))
-        return user;
+        if (init){
+            let user = {}
+            user.user = init.toJSON()
+            delete user.user.FriendSend
+            delete user.user.FriendReceive
+            user.friendrequestsent = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status == 0);
+            user.friendrequestreceived = init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status == 0);
+            user.friends = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status === 1).concat(init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status === 1))
+            console.log("\t\t\t Found !" + id);
+            return user;
+        }
+        console.log("\t\t\t Not Found ! - id: " + id);
+        return null
     }
 
     static async update(updateClause, whereClause) {

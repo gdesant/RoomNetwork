@@ -7,7 +7,6 @@ class FriendsService {
     static async getFriendsRequests() {
         try {
             const res = await axios.get( url + "/all");
-            console.log(res);
             return res.data
         } catch (err) {
             return err
@@ -17,7 +16,6 @@ class FriendsService {
     static async getFriendsRequestById(id: string | number) {
         try {
             const res = await axios.get( url + "/friends/id/" + id);
-            console.log(res);
             return res.data
         } catch (err) {
             return err
@@ -31,7 +29,6 @@ class FriendsService {
                 id: id,
                 status: status
             })
-            console.log(res)
             return res.data
         } catch (err) {
             return err
