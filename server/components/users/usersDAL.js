@@ -1,10 +1,13 @@
-const {User, FriendShipRequest} = require('../relations')
+const { User, Room, RoomRequest, FriendShipRequest, Message } = require('../relations')
 const { Op } = require("sequelize");
 
 class usersDAL {
     static async get() {
         console.log("\t\tUsersDAL@get");
-        return await User.findAll({attributes: ['id', 'username', 'email']});
+        return await User.findAll({
+            attributes: ['id', 'username', 'email'],
+            include: [{model: Room, as:'CreatedRooms', include: ['Members']}, 'JoinedRooms', 'Messages'],
+        });
     }
 
     static async findOne(whereClause, attributes) {
@@ -15,15 +18,21 @@ class usersDAL {
         });
     }
 
-    static async findAllStartWith(name) {
+    static async findAllStartWith(name, publicAcc, id) {
         console.log("\t\tUsersDAL@findAllStartWith");
         return await User.findAll({
             where: {
+                id : {
+                    [Op.not]: id,
+                },
                 username:{
                     [Op.startsWith]: name,
                 },
+                publicAccount: {
+                    [Op.is]: publicAcc,
+                }
             },
-            attributes: ['id', 'username', 'email'],
+            attributes: ['id', 'username'],
             limit: 15,
         })
     }
@@ -52,9 +61,29 @@ class usersDAL {
         return {Friends: result};
     }
 
-    static async getUserDashboardById(id) {
-        console.log("\t\tUsersDAL@getDashUser");
+    static async getUserMessages(id) {
+        console.log("\t\tUsersDAL@getUserMessages");
         const init = await User.findOne({
+            where:{
+                id,
+            },
+            include: [{
+                model: Message,
+                as: 'Messages',
+                attributes: ['content'],
+                through:{where: {status: 1}, attributes: []}
+            }],
+            attributes: [],
+        })
+        const result = init.toJSON().FriendSend.concat(init.toJSON().FriendReceive)
+        console.log(result)
+        return {Friends: result};
+    }
+
+    static async getUserDashboardById(id) {
+        console.log("\t\tUsersDAL@getDashUser " + id);
+        let init;
+        init = await User.findOne({
             where:{
                 id,
             },
@@ -70,6 +99,8 @@ class usersDAL {
                 through: {attributes: ['status', 'id', 'updatedAt']}
             }],
         })
+
+        console.log(init)
         if (init){
             let user = {}
             user.user = init.toJSON()
@@ -97,7 +128,7 @@ class usersDAL {
         return await User.create({
             username: body.username,
             email: body.email,
-            password: body.password
+            password: body.password,
         })
     }
 }

@@ -3,6 +3,7 @@
     <ul class="friendList" v-if="friends != null">
       <li v-for="fr in friends" v-bind:key="fr.id"  class="friendrequestBar">
         <div class="friendName" >{{fr.username}}</div>
+        <div class="friendConvContainer" @click="openChat(fr.id, fr.username)"><fa icon="message" class="friendConv" /></div>
       </li>
     </ul>
   </div>
@@ -30,6 +31,9 @@ export default {
       const frs = await UsersService.getUserFriends(this.user.id)
       this.friends = frs.Friends
       return
+    },
+    openChat: function(id, name){
+      this.emitter.emit("openChat", {id: id, name: name})
     },
   }
 }
@@ -150,14 +154,30 @@ input:focus{
 }
 
 .friendName{
- width: 52%;
+  width: 75%;
   vertical-align: center;
   text-align: left;
   font-family: 'Titillium Web', sans-serif;
   font-weight: 600;
   font-size: calc(1.3vh + 1.3vw);
   color: #B2B1B9;
-  padding: 0 4%;
+  margin: auto;
+  margin-left: 10%;
+}
+
+.friendConvContainer{
+  width: 25%;
+  height: 100%;
+  display: flex;
+  align-content: baseline;
+}
+
+.friendConv{
+  width: 100%;
+  color: white;
+  height: 50%;
+  margin: auto;
+  margin-right: 10%;
 }
 
 .addFriend{

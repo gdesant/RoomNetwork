@@ -8,11 +8,15 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.1.1",
+        "@fortawesome/free-solid-svg-icons": "^6.1.1",
+        "@fortawesome/vue-fontawesome": "^3.0.0-5",
         "async": "^3.2.0",
         "axios": "^0.21.1",
         "colyseus.js": "^0.14.12",
         "core-js": "^3.6.5",
         "mitt": "^3.0.0",
+        "moment": "^2.29.1",
         "vue": "^3.0.0",
         "vue-class-component": "^8.0.0-0",
         "vue-router": "^4.0.10",

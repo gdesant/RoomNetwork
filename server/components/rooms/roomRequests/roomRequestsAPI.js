@@ -1,35 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const roomsController = require("./roomsController");
+const roomRequestsController = require("./roomRequestsController");
 const jwt =require('jsonwebtoken')
 
 router.get("/", async function(req, res) {
-    let result = await roomsController.getRooms();
+    let result = await roomRequestsController.getRooms();
     res.send(result);
 });
 
 router.get("/id/:id", async function(req, res) {
-    let result = await roomsController.getRoomById(req.params.id);
-    res.send(result);
-});
-
-router.get("/psn/:id1/:id2", async function(req, res) {
-    let result = await roomsController.getPersonalRoom(req.params.id1, req.params.id2);
-    if (result == false)
-        console.log('Personal Room with user_' + req.params.id1 + ' and user_'+ req.params.id2 + " hasn't been found !")
-    res.send(result);
-});
-
-router.get("/study/:id/:p1?/:p2?/:p3?", async function(req, res) {
-    let result = await roomsController.getStudyRoom(req.params);
-    if (result == false)
-        console.log('Personal Room with user_' + req.params.id1 + ' and user_'+ req.params.id2 + " hasn't been found !")
+    let result = await roomRequestsController.getRoomById(req.params.id);
     res.send(result);
 });
 
 router.post("/create", authenticateToken, async function(req, res) {
     console.log('Access Register !')
-    let result = await roomsController.createRoom(req.body, req.user);
+    let result = await roomRequestsController.createRoom(req.body, req.user);
     if(result === 400) {
         res.status(result).send('Not enough parameters')
     } else if(result === 409) {

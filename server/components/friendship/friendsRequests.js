@@ -1,21 +1,13 @@
 const FriendsRequest = process.sequelize.define('friendsrequests', {
-    senderId: {
+    id: {
         type: process.Sequelize.INTEGER,
-        allowNull: false,
-    },
-    receiverId: {
-        type: process.Sequelize.INTEGER,
-        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
     },
     status: process.Sequelize.INTEGER,
 }, {
     timestamps: true
 });
-
-FriendsRequest.sync({
-    force: false
-});
-
 
 module.exports = FriendsRequest
 return FriendsRequest

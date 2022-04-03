@@ -74,6 +74,7 @@ router.beforeEach(async (to, from, next) => {
         }
         else if (to.meta.type === authType.LOGOUT) {
             const tk = localStorage.getItem('token');
+            localStorage.removeItem('token')
             console.log("LOGOUT: " + localStorage.getItem('token'))
             if (tk === undefined || tk === null)
                 return next()

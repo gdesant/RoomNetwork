@@ -11,7 +11,7 @@
           </div>
           <div class="inputDiv">
             <h4>Mot de passe</h4>
-            <input v-model="login.password">
+            <input v-model="login.password" type="password">
           </div>
           <button class="buttonDiv" type="submit">Login</button>
           <div v-if="error" class="">
@@ -26,11 +26,6 @@
           </a>
         </div>
 
-      </div>
-      <div style="height: 100%; width: 1%; background-color: transparent"></div>
-      <div class="">
-        <p>If you don't have an account, you can register one</p>
-        <button style="align-self: center">Register</button>
       </div>
     </div>
   </div>

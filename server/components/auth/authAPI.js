@@ -4,7 +4,36 @@ const authController = require("./authController");
 const jwt = require('jsonwebtoken')
 const usersController = require("../users/usersController");
 const friendsController = require("../friendship/friendsController");
+const messagesController = require("../message/messageController");
 
+//#region Messages
+
+router.post("/msg/new", async function(req, res) {
+    let result = await messagesController.createMessage(req.body);
+    if(result === 400) {
+        res.status(result).send('Not enough parameters')
+    } else if(result === 409) {
+        res.status(result).send('Username is already taken')
+    } else {
+        res.send(result);
+    }
+});
+
+router.post("/msg/neR", async function(req, res) {
+    let result = await messagesController.createRoomAndMessage(req.body);
+    if(result === 400) {
+        res.status(result).send('Not enough parameters')
+    } else if(result === 409) {
+        res.status(result).send('Username is already taken')
+    } else {
+        res.send(result);
+    }
+});
+
+//#endregion
+
+
+//#region Users
 //Private users data
 router.get("/users/dash/:id", async function(req, res) {
     let result = await usersController.getUserDashboardById(req.params.id);
@@ -12,7 +41,7 @@ router.get("/users/dash/:id", async function(req, res) {
 });
 
 router.get("/users/:id", authenticateToken, async function(req, res) {
-    let result = await usersController.getUserById(req.params.id, ['id', 'username' ,'email', 'password']);
+    let result = await usersController.getUserById(req.params.id, ['id', 'username' ,'email']);
     res.send(result);
 });
 
@@ -51,8 +80,25 @@ router.post("/register", async function(req, res) {
     }
 });
 
+router.post("/update/:id", authenticateToken, async function(req, res) {
+    console.log('Access Update !')
+    console.log(req);
+    req.body.id = req.params.id
+    let result = await authController.update(req.body);
+    if(result === 407) {
+        res.status(result).send('Username has not been found')
+    }else if(result === 408) {
+        res.status(result).send('Email is already taken')
+    } else if(result === 409) {
+        res.status(result).send('Username is already taken')
+    } else {
+        res.send(result);
+    }
+});
+
 router.get("/verify", authenticateToken, async function(req, res ) {
-        res.send(true);
+    let result = await authController.verify(req);
+    res.send(result);
 });
 
 router.post("/logout", authenticateToken, async function(req, res ) {
@@ -72,6 +118,7 @@ router.post("/login", async function(req, res) {
     else
         res.status(404).send('Username or password is invalid')
 });
+//#endregion
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -83,6 +130,7 @@ function authenticateToken(req, res, next) {
             return res.sendStatus(403)
         }
         req.user = user
+        req.token = token
         next()
     })
 }

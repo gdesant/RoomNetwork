@@ -1,5 +1,5 @@
 const {Op} = require("sequelize");
-const {FriendShipRequest, User} = require("../relations");
+const { User, Room, RoomRequest, FriendShipRequest, Message } = require("../relations");
 
 class friendsRequestDAL{
 

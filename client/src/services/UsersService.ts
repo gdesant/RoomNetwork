@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url =  "http://localhost:5000"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
+const url =  "http://192.168.1.10:5000"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
 axios.defaults.headers.common['Accept'] = 'application/json,text/plain, */*'
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 
@@ -7,6 +7,15 @@ class UsersService {
     static async getUsers() {
         try {
             const res = await axios.get( url + "/users/all");
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
+    static async getUserName(id: number) {
+        try {
+            const res = await axios.get( url + "/users/un/:id");
             return res.data
         } catch (err) {
             return err
@@ -135,11 +144,27 @@ class UsersService {
         }
     }
 
+    static async update(user: {username: string, email: string, publicAccount: boolean, publicEmail: boolean, token: string}, id: number) {
+        try {
+            const res = await axios.post(url + "/auth/update/" + id , {
+                username: user.username,
+                email: user.email,
+                publicAccount: user.publicAccount,
+                publicEmail: user.publicEmail,
+                token: user.token,
+            })
+            return res.data
+        } catch (err) {
+            return err
+        }
+    }
+
     static async checkToken(token: string) {
         try {
             axios.defaults.headers.common = {'Authorization': `Bearer ` + token}
             const res = await axios.get(url + "/auth/verify")
-            console.log('CheckToken :' + res)
+            console.log('CheckToken :')
+            console.log(res)
             return res.data === true
         } catch (err) {
             console.log('TokenError : ' + err)

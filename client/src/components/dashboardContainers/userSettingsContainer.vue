@@ -3,18 +3,11 @@
     <div class="profileAvatarDiv" style="grid-area: a"></div>
     <div class="inputLockDiv" >
       <h3>Username</h3>
-      <input disabled="true" :value=user.username>
+      <input v-model=user.username>
     </div>
     <div class="inputLockDiv" >
       <h3>Email</h3>
-      <input disabled="true" :value=user.email>
-    </div>
-    <div class="inputLockDiv" >
-      <h3>Password</h3>
-      <div class="passwordInput">
-        <input class="passwordInputField" ref="passwordInput" type="password" disabled="true" :value=user.password>
-        <div  ref="eye" class="divShow" @click="changePasswordType()"><i class="fas fa-eye eye" style="color:  #ecbfac; position:relative; top: calc(50% - 10px); text-align: center; font-size: calc(1vh + 1.5vw);"></i></div>
-      </div>
+      <input v-model=user.email>
     </div>
     <div class="buttonDiv">
       <button class="hoverButton1">Reset Password</button>
@@ -27,17 +20,33 @@
 import UsersService from "@/services/UsersService";
 
 export default {
-  name: "ProfileContainer",
+  name: "ProfileSettingsContainer",
   props:{
-    user: Object,
+    email: String,
+    username: String,
+  },
+  data() {
+    return {
+      user: {
+        email: "",
+        username: "",
+      },
+    }
+  },
+  created() {
+    this.user.email = this.email;
+    this.user.username = this.username;
   },
   methods: {
+    getData(){
+      return this.user;
+    },
     async logoutUser() {
       const tk = localStorage.getItem('token')
       if (tk){
         try {
           let response = await UsersService.logout(tk)
-          if (response.data === true){
+          if (response == true){
             localStorage.removeItem("token")
             this.$router.push('/')
             console.log("You have been log out of the website !")
@@ -69,8 +78,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .hoverButton1{
   color: orange;
   background-size: 100% 200%;
@@ -109,7 +116,6 @@ export default {
   background-color: #39393b;
   display: flex;
   flex-direction: column;
-  border-radius: 1vh 1vh;
   grid-gap: 10px;
   width: 100%;
   height: 100%;

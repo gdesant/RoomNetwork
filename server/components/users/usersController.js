@@ -23,7 +23,7 @@ class UsersController {
 
         console.log("\tUserController@findStartWith");
 
-        const jokes = await usersDAL.findAllStartWith(name)
+        const jokes = await usersDAL.findAllStartWith(name, true, userId)
         const Users = []
 
         for(let i = -1; ++i < Object.size(jokes);){
@@ -57,12 +57,23 @@ class UsersController {
 
     }
 
+    static async getUserMessages(id) {
+        console.log("\tUserController@getUserById");
+        const User = await usersDAL.getUserFriends(id);
+        return User;
+
+    }
 
     static async getUserByToken(token, attributes) {
         console.log("\tUserController@getUserByToken");
         if (token === null)
             return null;
         const User = await usersDAL.findOne({token: token}, attributes);
+        if (User == null)
+        {
+            console.log("Can't find user with token : " + token)
+            return null
+        }
         return User;
 
     }

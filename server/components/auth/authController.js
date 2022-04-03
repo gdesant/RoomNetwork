@@ -21,6 +21,34 @@ class AuthController {
         }
     }
 
+    static async update(params) {
+        console.log(params);
+        console.log("\tAuthController@signup");
+        const user = await usersDAL.findOne({token: params.token, id: params.id})
+        if (user == null)
+        {
+            console.log('User ' + params.id + ' with token ' + params.token + ' has not been found !')
+            return 407
+        }
+        const userNCheck = await usersDAL.findOne({username: params.username})
+        const userECheck = await usersDAL.findOne({email: params.email})
+        if(userECheck != null && user.id != userECheck.id) {
+            return 408
+        }
+        if(userNCheck != null && user.id != userNCheck.id) {
+            return 409
+        }
+        await usersDAL.update({username: params.username, email: params.email, publicAccount: params.publicAccount, publicEmail: params.publicEmail, token: generateAccessToken(params.username)},{ token: params.token})
+        const res = await usersDAL.findOne({username: params.username})
+        return {
+            username: res.username,
+            email: res.email,
+            publicAccount: res.publicAccount,
+            publicEmail: res.publicEmail,
+            token: res.token
+        }
+    }
+
     static async login(params) {
         if(!params.username || !params.password) return
         console.log("\tAuthController@login name=(" + params.username +") " + "| password=("+ params.password +")");
@@ -58,12 +86,10 @@ class AuthController {
         console.log("\rAuthController@verifyToken: " + token);
         const user = await usersDAL.findOne({token: token})
         if(user) {
-            if (jwt.verify(token, process.env.TOKEN_SECRET))
-            return {
-                id: user.id,
-                username: user.username,
-                token: user.token
-            }
+            console.log(user)
+            let decoded = jwt.verify(token, process.env.TOKEN_SECRET)
+            if (decoded.data == user.username)
+                return true;
         }
         return false
     }

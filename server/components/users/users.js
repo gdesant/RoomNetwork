@@ -17,16 +17,34 @@ const User = process.sequelize.define('user', {
     token: {
         type: process.Sequelize.STRING,
         allowNull: true,
-        unique: true
+    },
+    firstName: {
+        type: process.Sequelize.STRING,
+        allowNull: true,
+    },
+    lasName: {
+        type: process.Sequelize.STRING,
+        allowNull: true,
+    },
+    publicEmail: {
+        type: process.Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+    },
+    publicAccount: {
+        type: process.Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
     },
 }, {
     timestamps: true,
     scopes: {
         safeUser: {
-            attributes: { exclude: ['password', 'token', 'createdAt', 'updatedAt'] },
+            attributes: { exclude: ['password', 'token', 'createdAt', 'updatedAt', 'publicAccount', 'publicEmail'] },
         }
     }
 },);
+
 
 module.exports = User
 return User

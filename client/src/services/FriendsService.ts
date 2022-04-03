@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url =  "http://localhost:5000/friends"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
+const url =  "http://192.168.1.10:5000/friends"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
 axios.defaults.headers.post['Accept'] = 'application/json,text/plain, */*'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -15,7 +15,7 @@ class FriendsService {
 
     static async getFriendsRequestById(id: string | number) {
         try {
-            const res = await axios.get( url + "/friends/id/" + id);
+            const res = await axios.get( url + "/id/" + id);
             return res.data
         } catch (err) {
             return err
