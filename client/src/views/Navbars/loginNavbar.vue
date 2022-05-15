@@ -52,7 +52,23 @@
             </div>
           </div>
         </div>
+        <div class="hp120 fx-r">
+          <div class="nav-item pe-n" style="width: 200px; height: initial;" id="itemNavProfile">
+            <div class="navDropItem tal pe-n"  style="  height: 200px;  cursor: default" @click="switchDashView('dashboard')">
+              <div class="fx-r hp100"  style="  height: 200px;">
+                <div class="navSideIcon  wp20" style="  height: 200px;">
+                  <fa icon="user" size="xl"></fa>
+                </div>
+                <div class="navSideName b-clr-1 clr-4 wp80 tac" style="height: 200px;">
+                  <h1 class="mip0a mop20">{{ user.username }}</h1>
+                  <h3 class="mip0a mop10">{{ user.email }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="hp100 fx-cr">
+
           <div class="nav-item" id="itemNavBotLogout">
             <div class="navDropItem tal" @click="logoutDash()">
               <div class="fx-r">
@@ -89,10 +105,22 @@
               </div>
             </div>
           </div>
+          <div class="nav-item" id="itemNavBotLight">
+            <div class="navDropItem tal" @click="changeMode()">
+              <div class="fx-r">
+                <div class="navSideIcon">
+                  <fa icon="lightbulb" size="xl"></fa>
+                </div>
+                <div class="navSideName">
+                  <h3>Light Mode</h3>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
-      <div class="hp100 fx-c b-clr-4 openerSideBar table" @click="opencloseSide()">
+      <div class="openerSideBar table" @click="opencloseSide()">
         <span class=" table-c vame wp100 hp100" ><fa icon="arrow-right" class="wp100" :class="currentSideBarState == true ? '' : 'fa-rotate-180'"/></span>
       </div>
     </div>
@@ -108,7 +136,7 @@ export default {
   data(){
     return {
       currentSideBarState: false,
-      dashView: '',
+      dashView: 'none',
     }
   },
   methods: {
@@ -120,11 +148,14 @@ export default {
         return
       console.log('New DashView : ' + newV)
       this.$data.dashView = newV;
-      this.emitter.emit("changeDashView", {oldView: this.$data.dashView, newView: newV});
+      this.emitter.emit("navbarDashView", {newView: newV});
 
     },
     logoutDash(){
-      this.emitter.emit("logoutDash", this.logoutDash);
+      this.emitter.emit("openModal", {type: 'logoutModal'});
+    },
+    changeMode(){
+      this.emitter.emit("changeStyle");
     },
   }
 
@@ -150,7 +181,7 @@ export default {
   background-size: 200% 200%;
   background-position: center bottom;
   color: var(--main-color);
-  transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in-out;
   transition-delay: 0.3s;
 }
 
@@ -187,10 +218,18 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   transition: all 0.3s ease-in-out;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+.NavbarSideContent::-webkit-scrollbar {
+  display: none;
 }
 
 .closedBar{
   width: 50px;
+  transition: all 0.1s ease-in-out;
 }
 
 .navSideIcon{

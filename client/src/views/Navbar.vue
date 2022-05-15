@@ -1,20 +1,27 @@
 <template>
-    <loginNavbar v-if="this.$data.currentType == 1" :currentPath="currentPath" :currentType="currentType"></loginNavbar>
+    <loginNavbar v-if="this.$data.currentType == 1" :currentPath="currentPath" :currentType="currentType" :user="user"></loginNavbar>
     <logoutNavbar v-else :currentPath="currentPath" :currentType="currentType"></logoutNavbar>
 </template>
 
 <script>
-import loginNavbar from "./Navbars/loginNavbar";
-import logoutNavbar from "./Navbars/loginNavbar";
+import loginNavbar from "@/views/Navbars/loginNavbar";
+import logoutNavbar from "@/views/Navbars/logoutNavbar";
 
 export default {
   name: "Navbar",
   components: {loginNavbar, logoutNavbar},
+  props: {
+    user: Object,
+  },
   data(){
     return{
       currentType: 0,
       currentPath: '',
     }
+  },
+  mounted() {
+    this.$data.currentType = this.$route.meta.type;
+    this.$data.currentPath = this.$route.path;
   },
   methods: {
     switchView(data){
@@ -26,8 +33,9 @@ export default {
       })
     },
     changeMode(){
-        document.documentElement.classList.toggle('light')
         document.documentElement.classList.toggle('dark')
+        document.documentElement.classList.toggle('light')
+
     },
 
   },
@@ -71,8 +79,6 @@ export default {
   left: 0;
   overflow: hidden;
 }
-
-
 
 .NavbarMainTop:before {
   position:absolute; top:5vh; width:100vw; height:1vh; content:''; background: linear-gradient(var(--navbar-color) -50%, transparent 100%);
@@ -146,7 +152,7 @@ export default {
 }
 
 .navDropItem{
-  min-width: 175px;
+  width: 200px;
   height: 75px;
   display: block;
   width: initial;

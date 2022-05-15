@@ -38,18 +38,12 @@ export default class App extends Vue {
   width: 100vw;
 }
 
-.ModalContainer{
-  min-height: 100vh;
-  min-width: 100vw;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
 .RouterContainer{
   width: 100vw;
   height: 100vh;
   position: absolute;
+  top: 0;
+  left: 0;
   overflow-y: scroll;
   -ms-overflow-style: none;
   z-index: 0;

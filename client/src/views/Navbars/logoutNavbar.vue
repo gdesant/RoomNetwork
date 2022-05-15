@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     switchView(view){
-      this.emitter.emit("navbarSwitchView", {view});
+      this.emitter.emit("navbarSwitchView", {view: view});
     },
     changeMode(){
       this.emitter.emit("changeStyle");
@@ -54,7 +54,7 @@ export default {
     dropDown(ref, display, element){
         this.$refs[ref].classList.toggle(display)
         this.$refs[element].classList.toggle('active')
-    }
+    },
   },
 }
 </script>
