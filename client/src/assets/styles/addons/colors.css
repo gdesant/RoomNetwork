@@ -1,0 +1,57 @@
+/*#region Color*/
+.clr-1{
+    color:     var(--main-color);
+}
+
+.clr-2{
+    color:     var(--secondary-color);
+}
+
+.clr-3{
+    color:     var(--third-color);
+}
+
+.clr-4{
+    color:     var(--fourth-color);
+}
+
+.clr-5{
+    color:     var(--fifth-color);
+}
+
+
+.clr-wht{
+    color:     var(--white-color);
+}
+/*#endregion*/
+
+/*#region Background*/
+.b-clr-1{
+    background-color:     var(--main-color);
+}
+
+.b-clr-2{
+    background-color:     var(--secondary-color);
+}
+
+.b-clr-3{
+    background-color:     var(--third-color);
+}
+
+.b-clr-4{
+    background-color:     var(--fourth-color);
+}
+
+.b-clr-5{
+    background-color:     var(--fifth-color);
+}
+
+.b-clr-wht{
+    background-color:     var(--white-color);
+}
+
+
+b-clr-tsp{
+    background-color:     var(--transparent-color);
+}
+/*#endregion*/

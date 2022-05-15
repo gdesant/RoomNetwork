@@ -13,6 +13,18 @@ router.get("/id/:id", async function(req, res) {
     res.send(result);
 });
 
+router.post("/changeStatus", authenticateToken, async function(req, res) {
+    console.log('Access Register !')
+    let result = await roomRequestsController.changeMemberStatus(req.body);
+    if(result === 400) {
+        res.status(result).send('Not enough parameters')
+    } else if(result === 401) {
+        res.status(result).send('You are not authorized to do that !')
+    } else {
+        res.send(result);
+    }
+});
+
 router.post("/create", authenticateToken, async function(req, res) {
     console.log('Access Register !')
     let result = await roomRequestsController.createRoom(req.body, req.user);

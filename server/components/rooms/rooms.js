@@ -24,6 +24,10 @@ const Room = process.sequelize.define('room', {
         type: process.Sequelize.STRING,
         allowNull: true,
     },
+    ownerId: {
+        type: process.Sequelize.INTEGER,
+        allowNull: true,
+    }
 }, {
     timestamps: true
 });

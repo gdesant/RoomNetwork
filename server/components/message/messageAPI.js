@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 const messageController = require("./messageController");
 const jwt =require('jsonwebtoken')
+const io = require('../../server')
 
 router.get("/", async function(req, res) {
     let result = await messageController.getMessages();
-    res.send(result);
-});
-
-router.get("/id/:id", async function(req, res) {
-    let result = await messageController.getMessageById(req.params.id);
     res.send(result);
 });
 

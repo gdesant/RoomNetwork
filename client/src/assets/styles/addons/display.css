@@ -1,0 +1,44 @@
+/*#region Flexbox*/
+
+.fx{
+    display: flex;
+}
+
+.fx-c{
+    display: flex;
+    flex-direction: column;
+}
+
+.fx-cr{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.fx-r{
+    display: flex;
+    flex-direction: row;
+}
+
+.fx-rr{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+/*#endregion*/
+
+/*#region Table*/
+
+.table{
+    display: table;
+}
+
+.table-c{
+    width: initial;
+    height: initial;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    pointer-events: none;
+}
+
+/*#endregion*/

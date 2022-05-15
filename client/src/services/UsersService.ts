@@ -144,11 +144,13 @@ class UsersService {
         }
     }
 
-    static async update(user: {username: string, email: string, publicAccount: boolean, publicEmail: boolean, token: string}, id: number) {
+    static async update(user: {username: string, email: string, firstName: string | null, lastName: string | null, publicAccount: boolean, publicEmail: boolean, token: string}, id: number) {
         try {
             const res = await axios.post(url + "/auth/update/" + id , {
                 username: user.username,
                 email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 publicAccount: user.publicAccount,
                 publicEmail: user.publicEmail,
                 token: user.token,

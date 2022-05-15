@@ -3,8 +3,10 @@ require('dotenv').config()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const faker = require('faker')
-const app = express()
 const { Sequelize } = require("@sequelize/core")
+
+
+const app = express()
 
 process.Sequelize = Sequelize
 process.sequelize = new Sequelize(process.env.MYSQL_URL, {
@@ -14,7 +16,8 @@ process.sequelize = new Sequelize(process.env.MYSQL_URL, {
             require: true,
             rejectUnauthorized: false
         }
-    }
+    },
+    logging: false,
 })
 
 process.on('unhandledRejection', (reason, p) => {
@@ -22,7 +25,38 @@ process.on('unhandledRejection', (reason, p) => {
     // application specific logging, throwing an error, or other logic here
 });
 
-const {User, Room, Message, RoomRequest, FriendShipRequest} = require('./components/relations')
+var allClients = []
+const io = require('./components/socketio').init();
+
+
+io.on('connection', function(socket) {
+    console.log(socket.id + ' just connected !');
+    allClients.push(socket);
+
+    socket.on('join_room', function(data){
+        socket.join('room_' + data.id.toString())
+        console.log(socket.id + ' has joined the room ' + data.id.toString() + ' !')
+    })
+
+    socket.on('exit_room', function(data){
+        socket.leave('room_' + data.id.toString())
+        console.log(socket.id + ' has leave the room ' + data.id.toString() + ' !')
+    })
+
+    socket.on('disconnectDash', function() {
+        console.log(socket.id + ' got disconnect!');
+
+        var i = allClients.indexOf(socket);
+        allClients.splice(i, 1);
+    });
+
+});
+
+
+
+
+
+const {User, Room, Message, RoomRequest, FriendShipRequest, Addon} = require('./components/relations')
 
 const users = require("./components/users/usersAPI")
 const rooms = require("./components/rooms/roomsAPI")
@@ -43,6 +77,7 @@ process.sequelize
     console.error('Unable to connect to the database:', err);
 });
 
+
 app.use('/rooms/', rooms)
 app.use('/roomrequests/', roomrequests)
 app.use('/friends/', friends)
@@ -53,20 +88,12 @@ app.use('/messages/', message)
 const port = process.env.PORT || 5000;
 
 app.listen(port, '192.168.1.10', function () {
-    console.log("Server started on port " + port);
+    console.log("Server SQL started on port " + port);
 });
 
+module.exports.io = io
 
 
 
 
-/*
-for(let i = -1; ++i < 30;)
-{
- var msg = new Message();
- msg.content = "Salut message numero " + i;
- msg.roomId = 1;
- msg.senderId = i;
- msg.save()
-}*/
 

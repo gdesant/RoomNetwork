@@ -3,7 +3,7 @@
     <div class="securityGrid">
       <div class="securityItem">
           <div class="itemDesc">
-            <p class="itemDescData">Public Account :</p>
+            <h1 class="itemDescData">Public Account :</h1>
           </div>
           <div class="itemData">
             <label class="switch">
@@ -14,7 +14,7 @@
       </div>
       <div class="securityItem">
         <div class="itemDesc">
-          <p class="itemDescData">Public Email :</p>
+          <h1 class="itemDescData">Public Email :</h1>
         </div>
         <div class="itemData">
           <label class="switch">
@@ -118,7 +118,7 @@ export default {
   display: flex;
   flex-direction: row;
   border-radius: 0.5vh 0.5vw;
-  background-color: #4a4a4b;
+  background-color: #242324;
 }
 
 .itemDesc{
@@ -132,9 +132,11 @@ export default {
   display: table-cell;
   vertical-align: middle;
   text-align: left;
+  padding-left: 5%;
   height: 50%;
   width: 100%;
   margin: auto;
+  color: #a6a2a2;
 }
 
 .itemData{
@@ -188,11 +190,11 @@ export default {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: orange;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px orange;
 }
 
 input:checked + .slider:before {

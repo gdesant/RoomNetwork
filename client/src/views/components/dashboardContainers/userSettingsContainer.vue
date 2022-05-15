@@ -9,10 +9,20 @@
       <h3>Email</h3>
       <input v-model=user.email>
     </div>
+    <div class="inputLockDiv" >
+      <h3>First Name</h3>
+      <input v-model=user.firstName>
+    </div>
+    <div class="inputLockDiv" >
+      <h3>Last Name</h3>
+      <input v-model=user.lastName>
+    </div>
+    <!--
     <div class="buttonDiv">
       <button class="hoverButton1">Reset Password</button>
       <button class="hoverButton2" @click="logoutUser" type="submit ">Logout</button>
     </div>
+    -->
   </div>
 </template>
 
@@ -24,18 +34,24 @@ export default {
   props:{
     email: String,
     username: String,
+    firstName: String,
+    lastName: String
   },
   data() {
     return {
       user: {
         email: "",
         username: "",
+        firstName: "",
+        lastName: "",
       },
     }
   },
   created() {
     this.user.email = this.email;
     this.user.username = this.username;
+    this.user.firstName = this.firstName;
+    this.user.lastName = this.lastName;
   },
   methods: {
     getData(){
@@ -123,11 +139,12 @@ export default {
 
 .profileAvatarDiv{
   background-color: #2b2b2b;
-  border-color: white;
-  border-width: 2px;
+  border-style: dashed;
+  border-color: orange;
+  border-radius: calc((1vh + 1vw)/2);
   height: 30%;
-  width: 80%;
-  margin-left: 10%;
+  width: 30%;
+  margin: 5% auto;
 }
 
 .inputLockDiv{
@@ -135,10 +152,6 @@ export default {
   align-content: center;
   width: 60%;
   height: 10%;
-}
-
-input:active{
-  boder-color: transparent;
 }
 
 .passwordInput{
@@ -181,6 +194,11 @@ input:active{
 
 .passwordInputField{
   width: 85%;
+}
+
+h3{
+  padding-left: 1%;
+  color: orange;
 }
 
 </style>

@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const usersController = require("../users/usersController");
 const friendsController = require("../friendship/friendsController");
 const messagesController = require("../message/messageController");
+const io = require('../socketio').get()
 
 //#region Messages
 
@@ -15,6 +16,8 @@ router.post("/msg/new", async function(req, res) {
     } else if(result === 409) {
         res.status(result).send('Username is already taken')
     } else {
+        console.log('New Messages :')
+        io.sockets.in('room_'+ result.dataValues.roomId.toString()).emit('newMessage', {messageId: result.dataValues.id})
         res.send(result);
     }
 });

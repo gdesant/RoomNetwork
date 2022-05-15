@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300;400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap');
+
+p{
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: calc(1.1vh + 1.1vw);
+    width: 80%;
+    height: 30vh;
+}
+
+h1{
+    font-weight: 500;
+    font-size: calc((1.1vh + 1.1vw)*1.75);
+    font-family: 'Akshar', sans-serif;
+}
+
+h2{
+    font-weight: 400;
+    font-size: calc((1.1vh + 1.1vw)*1.35);
+    font-family: 'Akshar', sans-serif;
+}
+
+h3{
+    font-weight: 300;
+    font-size: calc((1.1vh + 1.1vw) * 1.1);
+    font-family: 'Akshar', sans-serif;
+}
+
+h4{
+    font-weight: 200;
+    font-size: calc((1.1vh + 1.1vw)*0.85);
+    font-family: 'Akshar', sans-serif;
+}
+
+a{
+    font-weight: 200;
+    font-size: calc((1.1vh + 1.1vw)*0.9);
+    font-family: 'Akshar', sans-serif;
+}
+
+li{
+    font-weight: 300;
+    font-size: calc(0.7vh + 0.7vw);
+    font-family: 'Akshar', sans-serif;
+}
+
+input{
+    font-size: calc((1.1vh + 1.1vw));
+    font-family: 'Akshar', sans-serif;
+}

@@ -57,7 +57,6 @@ class usersDAL {
             attributes: [],
         })
         const result = init.toJSON().FriendSend.concat(init.toJSON().FriendReceive)
-        console.log(result)
         return {Friends: result};
     }
 
@@ -70,46 +69,77 @@ class usersDAL {
             include: [{
                 model: Message,
                 as: 'Messages',
-                attributes: ['content'],
+                attributes: ['id', 'content'],
                 through:{where: {status: 1}, attributes: []}
             }],
             attributes: [],
         })
         const result = init.toJSON().FriendSend.concat(init.toJSON().FriendReceive)
-        console.log(result)
         return {Friends: result};
     }
 
     static async getUserDashboardById(id) {
-        console.log("\t\tUsersDAL@getDashUser " + id);
+        console.log("\t\tUsersDAL@getDashUser where id:" + id);
         let init;
         init = await User.findOne({
             where:{
-                id,
+                id: id,
             },
+            attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'publicAccount', 'publicEmail', 'token'],
             include: [{
                 model: User,
                 as: 'FriendSend',
-                attributes: ['id', 'username', 'email'],
-                through: {attributes: ['status', 'id', 'updatedAt']}
+                attributes: ['id', 'username'],
+                through: {attributes: ['status', 'id', 'updatedAt']},
+                required: false
             },{
                 model: User,
                 as: 'FriendReceive',
-                attributes: ['id', 'username', 'email'],
-                through: {attributes: ['status', 'id', 'updatedAt']}
+                attributes: ['id', 'username'],
+                through: {attributes: ['status', 'id', 'updatedAt']},
+                required: false
+            },{
+                model: Room,
+                as: 'CreatedRooms',
+                attributes: ['id', 'name', 'type'],
+                where: {
+                    type: {
+                        [Op.ne]: 2,
+                    }
+                },
+                required: false
+            },
+            {
+                model: Room,
+                as: 'JoinedRooms',
+                where:  {
+                    [Op.and]:[{
+                            ownerId: {
+                                [Op.ne]: id,
+                            }
+                        },{
+                            type: {
+                                [Op.ne]: 2,
+                            }
+                        }]
+                },
+                attributes: ['id', 'name', 'type', 'ownerId'],
+                required: false
             }],
-        })
 
-        console.log(init)
+        })
         if (init){
             let user = {}
             user.user = init.toJSON()
             delete user.user.FriendSend
             delete user.user.FriendReceive
-            user.friendrequestsent = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status == 0);
-            user.friendrequestreceived = init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status == 0);
-            user.friends = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status === 1).concat(init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status === 1))
+            user.user.FriendSend = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status == 0);
+            user.user.FriendReceive = init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status == 0);
+            user.user.CreatedRooms = init.toJSON().CreatedRooms.filter(r => r.type != 2);
+            user.user.JoinedRooms = init.toJSON().JoinedRooms.filter(r => r.type != 2);
+            user.user.Friends = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status === 1).concat(init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status === 1))
             console.log("\t\t\t Found !" + id);
+            user = user.user
             return user;
         }
         console.log("\t\t\t Not Found ! - id: " + id);

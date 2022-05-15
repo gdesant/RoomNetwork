@@ -2,7 +2,7 @@
   <div className="friendsModal">
     <div className="categoryDiv">
       <div className="titleDiv" v-on:mousedown="friendsExpander($refs.collFriendsAdd)">
-        <h3>friends Add</h3>
+        <h3>Friends Add</h3>
       </div>
       <div ref="collFriendsAdd" className="collapsable collapsed">
         <FriendAddComponent v-if="user != null" :user="user"></FriendAddComponent>
@@ -10,7 +10,7 @@
     </div>
     <div className="categoryDiv">
       <div className="titleDiv" v-on:mousedown="friendsExpander($refs.collFriendsAsks)">
-        <h3>friends Asks</h3>
+        <h3>Friends Asks</h3>
       </div>
       <div ref="collFriendsAsks" className="collapsable collapsed">
         <FriendRequestComponent v-if="friendrequestreceived != null && user != null" :user="user" :initfriendrequestreceived="friendrequestreceived"></FriendRequestComponent>
@@ -18,7 +18,7 @@
     </div>
     <div className="categoryDiv">
       <div className="titleDiv" v-on:mousedown="friendsExpander($refs.collFriendsList)">
-        <h3>friends List</h3>
+        <h3>Friends List</h3>
       </div>
       <div ref="collFriendsList" className="collapsable">
         <FriendListComponent v-if="friends != null && user != null" :user="user" :initfriends="friends"></FriendListComponent>
@@ -28,10 +28,9 @@
 </template>
 
 <script type="javascript">
-import UsersService from "@/services/UsersService";
-import FriendRequestComponent from "@/components/friendComponents/friendRequestsComponent"
-import FriendListComponent from "@/components/friendComponents/friendListComponent"
-import FriendAddComponent from "@/components/friendComponents/friendAddComponent"
+import FriendRequestComponent from "@/views/components/listContainers/friendComponents/friendRequestsComponent"
+import FriendListComponent from "@/views/components/listContainers/friendComponents/friendListComponent"
+import FriendAddComponent from "@/views/components/listContainers/friendComponents/friendAddComponent"
 
 
 export default {
@@ -43,14 +42,12 @@ export default {
   data() {
     return {
       friendrequestreceived: null,
-      friendrequestsent: null,
       friends: null,
     }
   },
   async created() {
-    const resp = await UsersService.getDashUserById(this.user.id)
-    this.friendrequestreceived = resp.friendrequestreceived
-    this.friends = resp.friends
+    this.friendrequestreceived = this.$props.user.FriendReceive
+    this.friends = this.$props.user.Friends
     return
   },
   methods: {
@@ -75,15 +72,15 @@ export default {
 
 <style scoped>
 .friendsModal {
-  margin: 2% 0;
-  height: 96%;
+  margin: 0;
+  height: 100%;
   width: 100%;
   align-self: center;
   overflow: hidden;
 }
 
 .categoryDiv {
-  min-height: 5%;
+  min-height: 1%;
 }
 
 .titleDiv {
@@ -101,8 +98,8 @@ export default {
 .collapsable {
   overflow: hidden;
   transition: max-height 0.3s ease-out, min-height 0.3s ease-out;
-  min-height: 71vh;
-  max-height: 74vh;
+  min-height: 78vh;
+  max-height: 81vh;
   width: 100%;
   display: flex;
   flex-direction: column;

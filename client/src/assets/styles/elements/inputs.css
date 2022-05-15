@@ -1,0 +1,53 @@
+input{
+    padding-left: 1%;
+    border: 3px solid var(--third-color);
+    outline: none;
+    background: var(--third-color);
+    color: var(--main-color);
+}
+
+input:invalid {
+    background: var(--third-color);
+    color: var(--main-color);
+}
+
+input:focus{
+
+    border-color: var(--success-color);
+    outline: none;
+
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0px 0px 0px 0px transparent inset !important;
+}
+
+input:-webkit-autofill{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--main-color);
+    background-color: var(--third-color);
+}
+
+
+
+.emptyInput{
+    border-color: transparent;
+}
+
+.validInput{
+    color: var(--success-color);
+    border-color: var(--success-color);
+}
+.validInput:focus{
+    border-color: var(--success-color);
+}
+
+.invalidInput{
+    color: var(--error-color);
+    border-color: var(--error-color) ;
+}
+.invalidInput:focus{
+    border-color: var(--error-color) ;
+}

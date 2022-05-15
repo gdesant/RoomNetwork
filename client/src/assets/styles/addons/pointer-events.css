@@ -1,0 +1,15 @@
+pe-n{
+    pointer-events: none;
+}
+pe-n:hover{
+    pointer-events: none;
+}
+
+
+pe-all{
+    pointer-events: all;
+}
+
+pe-auto{
+    pointer-events: auto;
+}

@@ -1,0 +1,13 @@
+button{
+    border-radius: calc((1vh + 1vw)*0.25);
+    font-size: calc(1.3vh + 1.3vw);
+    color: var(--third-color);
+    border-style: none;
+    background: var(--main-color);
+    transition: background-color 0.25s ease-out;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--main-color-o75);
+}

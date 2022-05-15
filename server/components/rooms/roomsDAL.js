@@ -1,4 +1,5 @@
 const { User, Room, RoomRequest, FriendShipRequest, Message } = require("../relations");
+const { Op } = require("sequelize");
 
 class roomsDAL{
     static async get() {
@@ -41,22 +42,21 @@ class roomsDAL{
         });
     }
 
+    static async count(whereClause) {
+        console.log("\t\tRoomsDAL@count")
+        return await Room.count({
+            where: whereClause,
+        })
+    }
+
     static async create(body) {
         console.log("\t\tRoomsDAL@create");
-        const room = await Room.create({
+
+        return await Room.create({
             type: body.type,
+            ownerId: body.ownerId,
+            name: body.roomName,
         });
-        await console.log(room)
-        let include = [
-                {model: User, as: 'Owner', attributes: ['id', 'username']},
-                {model: User, as: 'Members', attributes: ['id', 'username']},
-                {model: RoomRequest, as: 'Requests', attributes: ['id', 'senderId', 'roomId']}
-            ]
-
-
-        const roomFinal = await this.findOne({id: room.dataValues.id}, include)
-
-        return roomFinal
     }
 
 }

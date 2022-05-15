@@ -1,5 +1,4 @@
 const { User, Room, RoomRequest, FriendShipRequest, Message } = require("../relations");
-const Console = require("console");
 
 class messageDAL{
     static async get() {

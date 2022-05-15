@@ -2,6 +2,7 @@ const Room = require('./rooms/rooms')
 const User = require("./users/users");
 const Message = require('./message/message')
 const FriendShipRequest = require('./friendship/friendsRequests')
+const Addon = require('./addons/addons')
 const RoomRequest = require('./rooms/roomRequests/roomRequests')
 const faker = require('faker')
 const { Op } = require("sequelize");
@@ -32,6 +33,10 @@ Room.hasMany(Message, {as: 'Messages',  foreignKey:'roomId'})
 Message.belongsTo(RoomRequest, {as: 'Contact',  foreignKey:'contactId'})
 Message.belongsTo(Room, {as: 'Room',  foreignKey:'senderId'})
 Message.belongsTo(RoomRequest, {as: 'Sender',  foreignKey:'roomId'})
+
+Addon.belongsTo(Room, {as: 'Room', foreignKey: 'roomId'})
+Room.hasMany(Addon, {as: 'Addons', foreignKey: 'roomId'})
+
 
 
 
@@ -84,9 +89,7 @@ Message.prototype.cleanForChat = async function(clause){
 
 //#endregion
 
-
-
-
+//#region Init
 async function initSequelize() {
     console.log("Model Synchronization :");
     await process.sequelize.sync({
@@ -118,7 +121,7 @@ async function initSequelize() {
     for (var i = 1; i++ < 5;) {
         if (i != 1)
         {
-            var fr = await FriendShipRequest.build({senderId: 1, receiverId: i, status: 0,})
+            var fr = await FriendShipRequest.build({senderId: 1, receiverId: i, status: 1,})
             await fr.save()
         }
     }
@@ -137,12 +140,13 @@ async function initSequelize() {
 
 
 }
+//#endregion
 
 initSequelize()
 
 
-module.exports = { User, Room, RoomRequest, FriendShipRequest, Message };
+module.exports = { User, Room, RoomRequest, FriendShipRequest, Message, Addon };
 
 
 
-return { User, Room, RoomRequest, FriendShipRequest,  Message };
+return { User, Room, RoomRequest, FriendShipRequest,  Message, Addon };

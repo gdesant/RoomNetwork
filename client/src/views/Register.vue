@@ -1,22 +1,22 @@
 <template>
-  <div class="registerModal">
-    <div class="registerChoice">
-      <div class="registerTitle">
-        <h1>Créer un compte</h1>
+  <div class="registerModal a-s-bt b-clr-4">
+    <div class="registerSubModal mop50 mip0a fx-c">
+      <div class="wp100 hp10 tac">
+        <h2 class="clr-1 hp100 wp100">Créer un compte</h2>
       </div>
-      <form class="registerForm" @submit.prevent="registerUser">
-        <div class="scrollableDiv" dir="rtl">
-          <div class="inputDiv" dir="ltr">
-            <h4>Username</h4>
-            <input :class="register.username !== '' ? (usernameErr !== null ? 'invalidInput' : 'validInput') : 'emptyInput'" v-model="register.username" v-on:keyup="usernameErr = checkUsername(register.username)">
-            <ul class="alertDiv" v-if="(usernameErr !== null && usernameErr.length > 0)">
-              <li v-for="err in usernameErr" :key="err">
-                - {{err}}
-              </li>
-            </ul>
+      <form class="wp100 fx-c" @submit.prevent="registerUser">
+        <div class="wp80 mop50 mip0a fx-c" dir="rtl">
+          <div class="registerInput fx-c" dir="ltr">
+            <h4 class="clr-2 mbp05">USERNAME</h4>
+              <input :class="register.username !== '' ? (usernameErr !== null ? 'invalidInput' : 'validInput') : 'emptyInput'" v-model="register.username" v-on:keyup="usernameErr = checkUsername(register.username)">
+              <ul class="alertDiv" v-if="(usernameErr !== null && usernameErr.length > 0)">
+                <li v-for="err in usernameErr" :key="err">
+                  - {{err}}
+                </li>
+              </ul>
           </div>
-          <div class="inputDiv" dir="ltr">
-            <h4>Email</h4>
+          <div class="registerInput fx-c" dir="ltr">
+            <h4  class="clr-2 mbp05">EMAIL</h4>
             <input class="" :class="register.email !== '' ? (emailErr !== null ? 'invalidInput' : 'validInput') : 'emptyInput'" v-model="register.email" v-on:keyup="emailErr = checkEmail(register.email)">
             <ul class="alertDiv" v-if="(emailErr !== null && emailErr.length > 0)">
               <li v-for="err in emailErr" :key="err">
@@ -24,17 +24,17 @@
               </li>
             </ul>
           </div>
-          <div class="inputDiv" dir="ltr">
-            <h4>Mot de passe</h4>
-            <input type="password" class="" :class="register.password !== '' ? ((passwordErr !== null) ? 'invalidInput' : 'validInput') : 'emptyInput'" v-model="register.password" v-on:keyup="passwordErr= checkPassword(register.password, 0)">
+          <div class="registerInput fx-c" dir="ltr">
+            <h4 class="clr-2 mbp05">PASSWORD</h4>
+            <input type="password" :class="register.password !== '' ? ((passwordErr !== null) ? 'invalidInput' : 'validInput') : 'emptyInput'" v-model="register.password" v-on:keyup="passwordErr= checkPassword(register.password, 0)">
             <ul class="alertDiv" v-if="(passwordErr !== null && passwordErr.length > 0)">
               <li v-for="err in passwordErr" :key="err">
                 - {{err}}
               </li>
             </ul>
           </div>
-          <div class="inputDiv" dir="ltr">
-            <h4>Confirmation : Mot de passe</h4>
+          <div class="registerInput fx-c" dir="ltr">
+            <h4 class="clr-2 mbp05">CONFIRM PASSWORD</h4>
             <input type="password" class="" :class="register.pass_conf !== '' ? ((passwordConfErr === null && register.password == register.pass_conf) ? 'validInput' : 'invalidInput') : 'emptyInput'" v-model="register.pass_conf" v-on:keyup="passwordConfErr = checkPassword(register.pass_conf, 1)">
             <ul class="alertDiv" v-if="(passwordConfErr !== null && passwordConfErr.length > 0)">
               <li v-for="err in passwordConfErr" :key="err">
@@ -43,8 +43,7 @@
             </ul>
           </div>
         </div>
-        <button class="registerButton" :disabled="!(usernameErr == null && emailErr == null && passwordErr == null && passwordConfErr == null && (register.password == register.pass_conf))" type="submit">REGISTER</button>
-
+        <button class="registerButton wp75 mtp35 mip0a" :disabled="!(usernameErr == null && emailErr == null && passwordErr == null && passwordConfErr == null && (register.password == register.pass_conf))" type="submit"><h2 class="mop00 pop00">REGISTER</h2></button>
       </form>
     </div>
   </div>
@@ -166,110 +165,55 @@ export default {
 </script>
 
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300;400;600;700;900&display=swap');h2{
-  margin: 1% 0%;
-  color: #eaeaea;
-  font-weight: 600;
-  font-family: 'Titillium Web', sans-serif;
+<style scoped>
+
+
+.registerModal{
+  min-height: 55vh;
+  width: 50vw;
+  margin-inline: auto;
+  margin-top: 7.5vh;
+  margin-bottom: 3vh;
+  border-radius: calc(0.25vh + 0.25vw);
+  position:relative;
+  display: flex;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-h1{
-  color: #363535;
-  font-weight: 600;
+.registerSubModal{
+  width: 57vw;
+  margin: 1.5vw;
+}
+
+.registerInput{
+  min-height: 2vh;
   width: 100%;
-  font-size: calc(1.8vh + 1.8vw);
-  font-family: 'Titillium Web', sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
-h3{
-  margin: 1% 0%;
-  color: #cbcaca;
-  font-weight: 200;
-  font-family: 'Titillium Web', sans-serif;
+.registerButton{
+  min-height: 5vh;
 }
 
-h4{
-  margin: 0.5% 0%;
-  color: #afafaf;
-  font-weight: 600;
-  font-family: 'Titillium Web', sans-serif;
-}
-
-a{
-
-  color: #cbcaca;
-  font-weight: 200;
-  font-family: 'Titillium Web', sans-serif;
-}
-
-.linkText{
-  padding-left: 1%;
-  color: #ee5522;
-  font-weight: 400;
-  font-size: 103%;
-  font-family: 'Titillium Web', sans-serif;
-  text-decoration: none;
-}
-
-.linkText:hover{
-  color: #ef815c;
-}
-
-input{
-  width: 90%;
-  height: 5.5vh;
-  margin: 0.5% 0.5% 0% 0.5%;
-  padding-left: 3%;
-  color: #B2B1B9;
-  font-family: 'Titillium Web', sans-serif;
-  font-weight: 400;
-  background-color: #242324;
-  border: solid 1px transparent;
-}
-
-
-.inputDiv{
-  margin: 5% 0% 5% 2%;
-}
 
 .alertDiv{
-  width: 90%;
-  margin: 0% 0.5% 0.5% 0.5%;
-  padding-left: 3%;
-  padding-right: 4px;
-  background-color: #626265;
+  width: auto;
+  margin: 0 0 0 0;
+
+  padding: 1%;
+  padding: 1% 0 1% 1%;
+  padding-right: 0;
+  background-color: var(--fifth-color);
   list-style-type: none;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   box-shadow: 0 1px 6px rgba(0,0,0, .35);}
 
 .alertDiv li{
-  padding-left: 0%;
-  color: orange;
-  font-family: 'Titillium Web', sans-serif;
-  font-weight: 400;
-  font-size: calc(0.7vh + 0.7vw);
-}
-
-.emptyInput{
-}
-.emptyInput:focus{
-  outline: solid 1px white;
-}
-
-.validInput{
-  color: yellowgreen;
-}
-.validInput:focus{
-  outline: solid 1px yellowgreen;
-}
-
-.invalidInput{
-  color: orange;
-}
-.invalidInput:focus{
-  outline: solid 1px orange ;
+  padding-left: 0;
+  color: var(--white-color);
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -287,121 +231,7 @@ input{
   background-color: orange;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;}
-
-.registerModal{
-  margin: 1vh 30vw 1vh 30vw;
-  width: 40vw;
-  height: 96vh;
-  position:fixed;
-  background-color: #363537;
-  border-radius: 5px;
-  display: flex;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  -moz-animation: slide 0.2s ease;
-  -webkit-animation: slide 0.2s ease;
-  -o-animation: slide 0.2s ease;
-  -ms-animation: slide 0.2s ease;
-  animation: slide 0.2s ease;
-}
-
-.registerChoice{
-  margin: 0vh 15%;
-  width: 70%;
-  height: 90vh;
-  padding-top: 2.5vh;
-  padding-bottom: 2.5vh;
-  display: flex;
-  flex-direction: column;
-  -moz-animation: fadeIn 0.2s ease;
-  -webkit-animation: fadeIn 0.2s ease;
-  -o-animation: fadeIn 0.2s ease;
-  -ms-animation: fadeIn 0.2s ease;
-  animation: fadeIn 0.2s ease;
-}
-
-.registerForm{
-  height: 65%;
-  align-content: center;
-
-}
-
-.scrollableDiv{
-  height: 100%;
-  width: 78%;
-  padding: 0% 11%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  direction:rtl;
-  background-color: #464547;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  align-content: baseline;
-}
-
-.scrollableDiv::-webkit-scrollbar-track
-{
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.scrollableDiv::-webkit-scrollbar
-{
-  width: 12px;
-  background-color: transparent;
-}
-
-.scrollableDiv::-webkit-scrollbar-thumb
-{
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  background-color: orange;
-}
-
-
-
-
-p{
-  padding-left: 10%;
-  padding-right: 10%;
-  font-size: calc(1.1vh + 1.1vw);
-  width: 80%;
-  height: 30vh;
-  color: #B2B1B9;
-}
-
-.registerButton{
-  margin: 5% 20%;
-  width: 60%;
-  height: 7vh;
-  align-content: center;
-  font-family: 'Titillium Web', sans-serif;
-  font-weight: 600;
-  background-color: orange;
-  color: #282727;
-}
-
-.registerButton:hover{
-  background-color: #f1b13d;
-  color: #282727;
-}
-
-.registerButton:disabled{
-  background-color: #282727;
-  color: rgba(255, 189, 71, 0.6);
-}
-
-
-/* --------------------- Animations --------------------- */
-
-@keyframes fadeIn {
-  0%{opacity: 0;}
-  45% {opacity:0;}
-  100% {opacity:1;}
-}
-
-@keyframes slide
-{
-  from {bottom: 100vh;}
-  to {bottom: 0vh;}
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 </style>

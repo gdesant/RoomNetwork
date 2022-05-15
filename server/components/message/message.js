@@ -19,8 +19,6 @@ const Message = process.sequelize.define('message', {
         allowNull: false
     }
 }, {
-    getterMethods: {
-    },
     timestamps: true,
 });
 

@@ -1,5 +1,7 @@
 const roomsDAL = require("./roomsDAL");
-const {User, Message, RoomRequest} = require("../relations");
+const roomrequestDAL = require("./roomRequests/roomRequestsDAL")
+const {User, Message, RoomRequest, Addon} = require("../relations");
+const { Op } = require("sequelize");
 
 
 class RoomsController {
@@ -9,12 +11,18 @@ class RoomsController {
         return Rooms;
     }
 
-    static async getStudyRoom(params)
+    static async getStudyRoom(params, oid)
     {
         console.log("\tRoomController@getStudyRooms");
 
+        let vid = 0
+        if (typeof oid == 'number')
+            vid = oid
+
         var includeClause= [
-            {model: User, as: 'Owner', attributes: ['id', 'username']}, {model: User, as: 'Members', attributes: ['id', 'username'], through: {attributes: []}}, {model: Message ,as: 'Messages', attributes: ['id', 'content', 'createdAt', 'senderUsername'], limit: 25, order: [['createdAt', 'DESC']]}
+            {model: User, as: 'Owner', attributes: ['id', 'username']},
+            {model: User, as: 'Members', attributes: ['id', 'username'], through: {attributes: ['id', 'status']}, required: false, where: {id: {[Op.not]: vid}}},
+            {model: Message ,as: 'Messages', attributes: ['id', 'content', 'createdAt', 'senderUsername'], limit: 25, order: [['createdAt', 'DESC']]}
         ]
 
         const Room = await roomsDAL.findOne({id: params.id}, includeClause);
@@ -53,8 +61,11 @@ class RoomsController {
         if (user2 == null)
             return ({error: "There is no user with the id " + id2})
 
-        var include= [
-            {model: User, as: 'Owner', attributes: ['id', 'username']}, {model: User, as: 'Members', attributes: ['id', 'username'], through: {attributes: []}}, {model: Message ,as: 'Messages', attributes: ['id', 'content', 'createdAt', 'senderUsername'], limit: 25, order: [['createdAt', 'DESC']]}
+        let include= [
+            {model: User, as: 'Owner', attributes: ['id', 'username']},
+            {model: User, as: 'Members', attributes: ['id', 'username'], through: {attributes: []}},
+            {model: Message ,as: 'Messages', attributes: ['id', 'content', 'createdAt', 'senderUsername'], limit: 25, order: [['createdAt', 'DESC']]},
+            {model: Addon, as: 'Addons'}
         ]
 
         let attribute = ['id']
@@ -72,10 +83,31 @@ class RoomsController {
         
     }
 
-    static async createRoom(body, owner) {
+    static async createRoom(body) {
         console.log("\tRoomController@createRoom");
-        const Room = await roomsDAL.create(body, owner.id)
-        return Room
+        if (body.type != 2)
+        {
+            const amount = await roomsDAL.count({
+            [Op.and]: [{ownerId: body.ownerId}, {[Op.not]: {type: 2}}]
+            })
+            if (amount >= 10)
+                return 491
+        }
+        const Room = await roomsDAL.create(body)
+        let rr = await roomrequestDAL.create(Room.dataValues.id, body.ownerId)
+        rr.setRoom(Room)
+
+        let include= [
+            {model: User, as: 'Owner', attributes: ['id', 'username']},
+            {model: User, as: 'Members', attributes: ['id', 'username'], through: {attributes: []}},
+            {model: Message ,as: 'Messages', attributes: ['id', 'content', 'createdAt', 'senderUsername'], limit: 25, order: [['createdAt', 'DESC']]},
+            {model: Addon, as: 'Addons'}
+        ]
+
+        const roomFinal = await roomsDAL.findOne({id: Room.dataValues.id}, include)
+
+
+        return roomFinal
     }
 }
 

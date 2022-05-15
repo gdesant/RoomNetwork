@@ -5,6 +5,9 @@
     </div>
     <div class="chatContent" >
       <ChatDataComponent v-if="room != null" :room="room"/>
+      <div v-if="room == null" class="chatEmptyDiv">
+        <H1 class="emptyChatText">Select a chat with your friend list to show your messages !</H1>
+      </div>
     </div>
     <div class="chatInput">
       <ChatInputComponent v-if="otherUserId > 0" />
@@ -13,8 +16,8 @@
 </template>
 
 <script>
-import ChatDataComponent from '@/components/chatComponents/chatDataComponent'
-import ChatInputComponent from '@/components/chatComponents/chatInputComponent'
+import ChatDataComponent from '@/views/components/chatComponents/chatDataComponent'
+import ChatInputComponent from '@/views/components/chatComponents/chatInputComponent'
 import RoomsService from "@/services/RoomsService";
 import MessagesService from "@/services/MessagesService";
 
@@ -23,6 +26,7 @@ export default {
   components: { ChatDataComponent, ChatInputComponent},
   props:{
     user: Object,
+    socket: Object,
   },
   data() {
     return {
@@ -41,10 +45,6 @@ export default {
       return ""
     },
   },
-  async created() {
-    this.emitter.on("openChat", this.updateChat);
-    this.emitter.on("sendMessage", this.sendMessage);
-  },
   methods: {
     sendMessage: async function(data)
     {
@@ -54,12 +54,18 @@ export default {
       } else {
         await MessagesService.sendRoomMessage(this.$props.user.id, this.$data.room.id, data.content)
       }
-      await this.updateChat({id: this.$data.otherUserId, name: this.$data.otherUserName})
       return
     },
     updateChat: async function (data)
     {
+      let changeRoom = false;
       let room
+      if (this.$data.otherUserId != data.id)
+      {
+        changeRoom = true
+        if (this.$data.room != null)
+          this.$props.socket.emit('exit_room', {id: this.$data.room.id})
+      }
       this.$data.otherUserId = data.id;
       this.$data.otherUserName = data.name;
       room = await RoomsService.getPrivateRoom(this.$props.user.id, data.id)
@@ -79,10 +85,34 @@ export default {
       {
         this.$data.validRoom = true;
         this.$data.room = room
+        if (changeRoom)
+          this.$props.socket.emit('join_room', {id: room.id})
       }
       return;
+    },
+    getNewMessage: async function (messageId)
+    {
+      var message = await MessagesService.getMessageById(messageId)
+      console.log(message)
+      if (this.$data.room != null)
+      {
+        console.log('Pushing new msg')
+        this.$data.room.Messages.unshift(message)
+      }
+
     }
-  }
+  },
+  async created() {
+    let self = this
+
+    this.emitter.on("openChat", this.updateChat);
+    this.emitter.on("sendMessage", this.sendMessage);
+
+    this.$props.socket.on('newMessage', function (data){
+      console.log('NewMessage')
+      self.getNewMessage(data.messageId)
+    })
+  },
 }
 </script>
 
@@ -123,6 +153,19 @@ export default {
   width: 100%;
   height: 15%;
   display: flex;
+}
+
+.chatEmptyDiv{
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+}
+
+.emptyChatText{
+  align-self: center;
+  text-align: center;
+  color: #a6a2a2;
 }
 
 </style>

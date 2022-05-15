@@ -22,7 +22,7 @@ const User = process.sequelize.define('user', {
         type: process.Sequelize.STRING,
         allowNull: true,
     },
-    lasName: {
+    lastName: {
         type: process.Sequelize.STRING,
         allowNull: true,
     },

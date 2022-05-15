@@ -1,0 +1,54 @@
+:root{
+    --white-color: #ffffff;
+    --black-color: #000000;
+    --transparent-color: transparent;
+    --alert-color: #d06c4d;
+    --error-color: #c9883d;
+    --success-color: #5bb00a;
+}
+
+:root.light{
+    --main-color: #FFA600;
+    --main-color-o75: rgba(255, 166, 0, 0.75);
+    --secondary-color: #d08008;
+    --third-color: #2d3236;
+    --fourth-color: #191e21;
+    --fourth-color-hover: #0f0f10;
+    --fifth-color: #21292c;
+
+    --icon-color: var(--main-color);
+    --icon-b-color: var(--fourth-color);
+    --icon-color-hover: var(--secondary-color);
+    --icon-b-color-hover: var(--fourth-color-hover);
+    --icon-color-active: var(--fourth-color);
+    --icon-b-color-active: var(--main-color);
+
+    --input-color: var(--white-color);
+    --input-b-color: var(--third-color);
+
+    --navbar-color: var(--third-color);
+}
+
+:root.dark{
+    --main-color: #FFA600;
+    --main-color-hover: #ff6200;
+    --main-color-o75: rgba(255, 166, 0, 0.75);
+    --secondary-color: #d08008;
+
+    --third-color: #20262a;
+    --fourth-color: #191e21;
+    --fourth-color-hover: #15181a;
+    --fifth-color: #21292c;
+
+    --icon-color: var(--main-color);
+    --icon-b-color: var(--fourth-color);
+    --icon-color-hover: var(--main-color-hover);
+    --icon-b-color-hover: var(--fourth-color-hover);
+    --icon-color-active: var(--fourth-color);
+    --icon-b-color-active: var(--main-color);
+
+    --input-color: var(--white-color);
+    --input-b-color: var(--third-color);
+
+    --navbar-color: var(--third-color);
+}

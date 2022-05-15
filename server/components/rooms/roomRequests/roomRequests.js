@@ -10,6 +10,16 @@ const RoomRequest = process.sequelize.define('roomrequests', {
         allowNull: false,
         defaultValue: 0,
     },
+    role: {
+        type: process.Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    },
+    roomnickname: {
+        type: process.Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 0,
+    }
 }, {
     timestamps: true
 });

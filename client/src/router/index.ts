@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import UsersService from "../services/UsersService"
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import Logout from "../views/Logout.vue";
 import Register from "../views/Register.vue";
 import Dashboard from "../views/Dashboard.vue";
 
@@ -25,6 +26,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: {type: authType.LOGOUT},
     },
     {
+        path: "/logout",
+        name: "Logout",
+        component: Logout,
+        meta: {type: authType.LOGIN},
+    },
+    {
         path: "/register",
         name: "Register",
         component: Register,
@@ -32,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
 
     },
     {
-        path: "/dashboard/:scrollView?",
+        path: "/dashboard",
         name: "Dashboard",
         component: Dashboard,
         meta: {type: authType.LOGIN},

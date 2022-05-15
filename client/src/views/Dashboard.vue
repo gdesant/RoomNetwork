@@ -1,114 +1,108 @@
 <template>
   <div class="main">
-    <div id="zoomDashboard" class="zoomDashboard" v-bind:style="{ 'zoom': zoomValue, 'background-color': zoomValue != 1 ? 'rgba(44, 120, 176, ' + (1 - zoomValue).toString() +')' : 'transparent'} ">
-      <div id="navDashBar" class="navDashBar">
-        <fa icon="message" class="dashIcon" />
-        <fa icon="message" class="dashIcon" />
-        <fa icon="message" class="dashIcon" />
-      </div>
-      <div id="dashboardMain" class="dashboardMain" v-bind:style="{ 'left': '-' + positions[layoutIndex.x].x.toString() + 'px', 'top': '50px',} ">
-        <div class="roomsDiv">
-          <div class ="profileEditDiv">
-            <ProfileEdit v-if="user !== null" :user="user" />
-          </div>
-          <div class="roomsEditDiv">
-          </div>
-        </div>
-        <div class="roomsListDiv">
-          <RoomsListsContainer v-if="user !== null" :user="user"/>
-        </div>
-        <div class="interactDiv">
-          <div class="settingsSelectDiv">
-            <button class="settingsSelectButton" v-on:click="changeView('settings', $event)">Settings</button>
-            <button class="settingsSelectButton" v-on:click="changeView('security', $event)">Security</button>
-          </div>
-          <div class ="profileEditDiv">
-            <ProfileSettingsContainer v-if="user !== null && currentEditView == 'settings'" :username=user.username :email=user.email ref="profileSettings"/>
-            <ProfileSecurityContainer v-if="user !== null && currentEditView == 'security'" :publicAccount=user.publicAccount :publicEmail=user.publicEmail ref="profileSecurity"/>
-          </div>
-          <div class='saveUserDiv'>
-            <button class='saveUserButton' v-on:click="updateUser()">Save User !</button>
-          </div>
-        </div>
-        <div class="friendsListDiv">
-          <FriendsListsContainer v-if="user !== null" :user="user"/>
-        </div>
-        <div class="chatDiv">
-          <ChatContainer v-if="user !== null" :user="user" />
-        </div>
-      </div>
+    <login-navbar></login-navbar>
+    <!--
+<div id="dashboardMain" class="dashboardMain" v-bind:style="{ 'left': '-' + leftSideValue.toString() + 'px', 'top': '50px',} " ref="dashoardMain">
+  <div class="roomsDiv">
+    <RoomContainer v-if="user != null" :user="user" :socket="socket"/>
+  </div>
+  <div class="listDiv">
+    <RoomsListsContainer v-if="user != null" :user="user"/>
+  </div>
+  <div class="interactDiv">
+    <div class="settingsSelectDiv">
+      <button class="settingsSelectButton" disabled v-on:click="changeView('settings', $event)">Settings</button>
+      <button class="settingsSelectButton" v-on:click="changeView('security', $event)">Security</button>
     </div>
+    <div class ="profileEditDiv">
+      <ProfileSettingsContainer v-if="user !== null && frontData.currentEditView == 'settings'" :username=user.username :email=user.email :firstName=user.firstName :lastName=user.lastName ref="profileSettings"/>
+      <ProfileSecurityContainer v-if="user !== null && frontData.currentEditView == 'security'" :publicAccount=user.publicAccount :publicEmail=user.publicEmail ref="profileSecurity"/>
+    </div>
+    <div class='saveUserDiv'>
+      <button class='saveUserButton' v-on:click="updateUser()">Save User !</button>
+    </div>
+  </div>
+  <div class="listDiv">
+    <FriendsListsContainer v-if="user !== null" :user="user"/>
+  </div>
+  <div class="chatDiv">
+    <ChatContainer v-if="user !== null && socket !== null" :user="user" :socket="socket" />
+  </div>
+</div>-
+
+<div id="zoomDashboard" class="zoomDashboard" v-bind:style="{ 'zoom': frontData.zoomValue, 'background-color': frontData.zoomValue != 1 ? 'rgba(44, 120, 176, ' + (1 - frontData.zoomValue).toString() +')' : 'transparent'} ">
+
+</div>
+
+import FriendsListsContainer from "@/views/components/listContainers/friendsListsContainer";
+import ProfileSettingsContainer from "@/views/components/dashboardContainers/userSettingsContainer";
+import ProfileSecurityContainer from "@/views/components/dashboardContainers/userSecurityContainer";
+import RoomsListsContainer from "@/views/components/listContainers/roomsListsContainer";
+import RoomContainer from "@/views/components/dashboardContainers/roomContainers/roomContainer";
+import ChatContainer from "@/views/components/dashboardContainers/chatContainer"
+
+
+
+, RoomContainer, RoomsListsContainer, ProfileSettingsContainer, ProfileSecurityContainer,  FriendsListsContainer, ChatContainer
+-->
   </div>
 </template>
 
 <script>
-import FriendsListsContainer from "@/components/dashboardContainers/friendsListsContainer";
-import ProfileSettingsContainer from "@/components/dashboardContainers/userSettingsContainer";
-import ProfileSecurityContainer from "@/components/dashboardContainers/userSecurityContainer";
-import RoomsListsContainer from "@/components/dashboardContainers/roomsListsContainer";
-import ChatContainer from "@/components/dashboardContainers/chatContainer"
 import UsersService from "@/services/UsersService";
 import axios from "axios";
+import {io} from "socket.io-client";
+import LoginNavbar from "@/views/Navbars/loginNavbar";
 
-const sides = {Right:0, Left:1}
-const swapViewInterval = 1000
 
 export default {
-  components: {RoomsListsContainer, ProfileSettingsContainer, ProfileSecurityContainer,  FriendsListsContainer, ChatContainer},
+  components: {LoginNavbar},
   data() {
     return {
       user: null,
       users: '',
-      rooms: '',
-      currentEditView: 'settings',
-      zoomValue: 1,
-      layoutIndex: {x: 0, y:0},
-      swapViewLast: 0,
-      positions: [{x:0, y:0}, {x: 1209, y: 0}, {x: 2418, y: 0}]
+      socket : null,
+      layout: [{x:0, y:0}, {x: 1209, y: 0}, {x: 2418, y: 0}],
+      frontData: {
+        currentEditView: 'settings',
+        zoomValue: 1,
+        layoutIndex: {x: 0, y:0},
+        isMoving: false,
+      }
     }
   },
+  async mounted(){
+    window.onresize = this.reloadWindowSize
+
+    this.$data.socket = io('http://localhost:3000', {
+      reconnectionDelay: 1000,
+      reconnection: true,
+      reconnectionAttemps: 10,
+      transports: ['websocket'],
+      agent: false,
+      upgrade: false,
+      rejectUnauthorized: false
+    })
+
+    this.$data.socket.on('connect_error', function (err){
+      console.log(err)
+    })
+
+    this.emitter.on("logoutDash", this.logoutDash);
+  },
   methods: {
-    scrollHandle(event){
-      if (event.deltaY != 0)
-        this.zoomScrollHandle(event.deltaY)
-      else if (event.deltaX != 0)
-        this.swapScrollHandle(event.deltaX)
+    logoutDash(){
+      this.$router.push("/logout");
     },
-    zoomScrollHandle(deltaY)
-    {
-      console.log("ZoomScoll - " + deltaY.toString())
-      const zoomVal = this.$data.zoomValue - ((deltaY / 100)/ 20)
-      if (zoomVal > 1)
-        this.$data.zoomValue = 1
-      else if (zoomVal < 0.25)
-        this.$data.zoomValue = 0.25
-      else
-        this.$data.zoomValue = zoomVal
-    },
-    swapView(side){
-      if (this.swapViewLast >= (Date.now() - swapViewInterval))
-        return
-      let layoutValue = this.layoutIndex.x;
-      if (side == sides.Right && this.layoutIndex.x + 1 <= this.positions.length)
-        this.layoutIndex.x++;
-      if (side == sides.Left && this.layoutIndex.x - 1 >= 0)
-        this.layoutIndex.x--;
-      if (layoutValue != this.layoutIndex.x)
-        this.swapViewLast = Date.now()
-    },
-    swapScrollHandle(deltaX){
-      if (deltaX > 0)
-        this.swapView(sides.Right)
-      else if (deltaX < 0)
-        this.swapView(sides.Left)
-    },
-    updateViewData(string){
+    updateUserData(string){
       if (this.user == null)
         return
       if (string == 'settings'){
         let data = this.$refs.profileSettings.getData()
         this.user.username = data.username
         this.user.email = data.email
+        this.user.firstName = data.firstName
+        this.user.lastName = data.lastName
         return
       }
       else if (string == 'security'){
@@ -119,27 +113,15 @@ export default {
       }
       return
     },
-    changeView(string, event) {
-      this.updateViewData(this.currentEditView)
-      this.currentEditView = string
-
-      const buttons = document.getElementsByClassName('settingsSelectButton');
-
-      for (let i = 0; i < buttons.length; i++){
-        if (buttons[i] == event.target){
-          buttons[i].disabled = true;
-        }
-        else
-          buttons[i].disabled = false;
-      }
-    },
     async updateUser() {
       try {
         const tk = localStorage.getItem('token')
-        this.updateViewData(this.currentEditView)
+        this.updateUserData(this.frontData.currentEditView)
 
-        let response = await UsersService.update({username: this.user.username, email: this.user.email, publicAccount: this.user.publicAccount, publicEmail: this.user.publicEmail, token: tk}, this.user.id)
+        let response = await UsersService.update({username: this.user.username, email: this.user.email, firstName: this.user.firstName, lastName: this.user.lastName, publicAccount: this.user.publicAccount, publicEmail: this.user.publicEmail, token: tk}, this.user.id)
         let token = response.token
+        if (response != null)
+          this.user = response
         console.log('RESPONSE LOGIN : ', response)
         if (token){
           localStorage.setItem("token", token)
@@ -151,33 +133,37 @@ export default {
         console.log(err);
         this.message = err.response.data
       }
-    }
+    },
+    reloadWindowSize(){
+    },
   },
-  async mounted(){
-    let scrollTo = document.getElementById("dashboardMain").scrollWidth/3
-    document.getElementById("zoomDashboard").scrollTo(scrollTo, 0)
-
-    document.onwheel = this.scrollHandle
+  async created() {
 
     const tk = localStorage.getItem('token')
     if (tk) {
       try{
-          const user = await UsersService.getUserByToken(tk)
-          if (user){
-            this.user = user
-          }
-          else{
-            this.$router.push("/login")
-          }
+        let user = await UsersService.getUserByToken(tk)
+        user = await UsersService.getDashUserById(user.id)
+        if (user == null){
+          this.$router.push("/login")
+        }
+        this.$data.user = user
+        console.log("Dash users :")
+        console.log(user)
       } catch (e) {
         console.log('Error GetUser: ' + e)
         this.$router.push("/login")
       }
     }
   },
-  created() {
-    this.$data.swapViewLast = Date.now();
-  }
+  beforeUnmount() {
+    this.$data.socket.emit('disconnectDash');
+  },
+  computed: {
+    leftSideValue: function() {
+      return this.layout[this.frontData.layoutIndex.x].x;
+    },
+  },
 }
 
 
@@ -206,7 +192,7 @@ export default {
 }
 
 .navDashBar{
-  height: 7%;
+  height: 5%;
   width: 10%;
   display: flex;
   flex-direction: row;
@@ -217,7 +203,16 @@ export default {
 .dashIcon{
   width: 33%;
   height: 50%;
-  margin: 0.2% 0.1%;
+  margin: auto;
+  align-self: baseline;
+  color: white;
+}
+
+.dashIconInactive{
+  width: 33%;
+  height: 25%;
+  margin: auto;
+  align-self: baseline;
   color: white;
 }
 
@@ -225,7 +220,7 @@ export default {
   height: 90%;
   display: flex;
   align-self: end;
-  flex-direction: row;
+  flex-direction: column;
   overflow-x: scroll;
   overflow-y: hidden;
   position: absolute;
@@ -243,20 +238,6 @@ export default {
   flex: 0 0 auto;
 }
 
-.roomsListDiv{
-  width: 19vw;
-  height: 100%;
-  margin: 0 0.5vw 0 0.5vw;
-  align-self: center;
-  flex: 0 0 auto;
-  background-color: #464547;
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.15) -5px -5px 10px 10px;
-  display: flex;
-  flex-direction: column;
-}
-
 .interactDiv{
   width: 60vw;
   height: 100%;
@@ -269,7 +250,7 @@ export default {
   overflow: hidden
 }
 
-.friendsListDiv{
+.listDiv{
   width: 19vw;
   height: 100%;
   margin: 0 0.5vw 0 0.5vw;
@@ -280,6 +261,7 @@ export default {
   display: flex;
   flex-direction: column;
   border-radius: 1vh 1vw;
+  overflow: hidden;
 }
 
 .chatDiv{
@@ -298,7 +280,7 @@ export default {
   overflow: inherit;
   display: flex;
   flex-direction: row;
-  background-color: #5e5e60;
+  background-color: #2a2a2c;
 
 }
 
@@ -306,7 +288,7 @@ export default {
   width: 33.3%;
   margin: 0 0;
   height: 100%;
-  background-color: #3e3e41;
+  background-color: #505052;
   color: lightgray;
   border-top-left-radius: 1vh;
   border-top-right-radius: 1vh;
@@ -320,7 +302,8 @@ export default {
 }
 
 .settingsSelectButton:hover:enabled{
-  background-color: #505052;
+  background-color: #7e7e83;
+  color: #414141;
 }
 
 .settingsSelectButton:active:enabled{
@@ -336,7 +319,18 @@ export default {
   height: 100%;
   width: 100%;
   margin: 0 0;
+  background-color: #2a2a2c;
 }
+
+.saveUserButton:hover{
+  background-color: #353536;
+}
+
+.saveUserButton:active{
+  background-color: #7c7c7c;
+  color: #3b3b3d;
+}
+
 
 .profileEditDiv{
   width: 100%;

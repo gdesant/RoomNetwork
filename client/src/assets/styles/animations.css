@@ -1,0 +1,27 @@
+@keyframes fadeIn {
+    0%{opacity: 0;}
+    45% {opacity:0;}
+    100% {opacity:1;}
+}
+
+@keyframes slide_tb
+{
+    from {bottom: 100vh;}
+    to {bottom: 0vh;}
+}
+
+@keyframes slide_bt
+{
+    from {top: 100vh;}
+    to {top: 0vh;}
+}
+
+
+
+.a-s-bt{
+    -moz-animation: slide_bt 0.2s ease-in-out;
+    -webkit-animation: slide_bt 0.2s ease-in-out;
+    -o-animation: slide_bt 0.2s ease-in-out;
+    -ms-animation: slide_bt 0.2s ease-in-out;
+    animation: slide_bt 0.2s ease-in-out ;
+}

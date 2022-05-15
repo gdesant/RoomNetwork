@@ -38,15 +38,8 @@ class AuthController {
         if(userNCheck != null && user.id != userNCheck.id) {
             return 409
         }
-        await usersDAL.update({username: params.username, email: params.email, publicAccount: params.publicAccount, publicEmail: params.publicEmail, token: generateAccessToken(params.username)},{ token: params.token})
-        const res = await usersDAL.findOne({username: params.username})
-        return {
-            username: res.username,
-            email: res.email,
-            publicAccount: res.publicAccount,
-            publicEmail: res.publicEmail,
-            token: res.token
-        }
+        await usersDAL.update({username: params.username, email: params.email, lastName: params.lastName, firstName: params.firstName, publicAccount: params.publicAccount, publicEmail: params.publicEmail, token: generateAccessToken(params.username)},{ token: params.token})
+        return await usersDAL.getUserDashboardById(params.id)
     }
 
     static async login(params) {
@@ -86,7 +79,6 @@ class AuthController {
         console.log("\rAuthController@verifyToken: " + token);
         const user = await usersDAL.findOne({token: token})
         if(user) {
-            console.log(user)
             let decoded = jwt.verify(token, process.env.TOKEN_SECRET)
             if (decoded.data == user.username)
                 return true;

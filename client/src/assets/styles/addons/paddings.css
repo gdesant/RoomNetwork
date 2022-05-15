@@ -1,0 +1,631 @@
+/*#region Percent*/
+
+/*#region padding Left*/
+.plp00{
+    padding-left: 0;
+}
+
+.plp05{
+    padding-left: 0.5%;
+}
+
+.plp10{
+    padding-left: 1%;
+}
+
+.plp15{
+    padding-left: 1.5%;
+}
+
+.plp20{
+    padding-left: 2%;
+}
+
+.plp25{
+    padding-left: 2.5%;
+}
+
+.plp30{
+    padding-left: 3%;
+}
+
+.plp35{
+    padding-left: 3.5%;
+}
+
+.plp40{
+    padding-left: 4%;
+}
+
+.plp45{
+    padding-left: 4.5%;
+}
+
+.plp50{
+    padding-left: 5%;
+}
+
+.plp55{
+    padding-left: 5.5%;
+}
+
+.plp60{
+    padding-left: 6%;
+}
+
+.plp65{
+    padding-left: 6.5%;
+}
+
+.plp70{
+    padding-left: 7%;
+}
+
+.plp75{
+    padding-left: 7.5%;
+}
+
+.plp80{
+    padding-left: 8%;
+}
+
+.plp85{
+    padding-left: 8.5%;
+}
+
+.plp90{
+    padding-left: 9%;
+}
+
+.plp95{
+    padding-left: 9.5%;
+}
+
+.plp100{
+    padding-left: 10%;
+}
+/*#endregion*/
+
+/*#region padding Right*/
+.prp00{
+    padding-right: 0;
+}
+
+
+.prp05{
+    padding-right: 0.5%;
+}
+
+.prp10{
+    padding-right: 1%;
+}
+
+.prp15{
+    padding-right: 1.5%;
+}
+
+.prp20{
+    padding-right: 2%;
+}
+
+.prp25{
+    padding-right: 2.5%;
+}
+
+.prp30{
+    padding-right: 3%;
+}
+
+.prp35{
+    padding-right: 3.5%;
+}
+
+.prp40{
+    padding-right: 4%;
+}
+
+.prp45{
+    padding-right: 4.5%;
+}
+
+.prp50{
+    padding-right: 5%;
+}
+
+.prp55{
+    padding-right: 5.5%;
+}
+
+.prp60{
+    padding-right: 6%;
+}
+
+.prp65{
+    padding-right: 6.5%;
+}
+
+.prp70{
+    padding-right: 7%;
+}
+
+.prp75{
+    padding-right: 7.5%;
+}
+
+.prp80{
+    padding-right: 8%;
+}
+
+.prp85{
+    padding-right: 8.5%;
+}
+
+.prp90{
+    padding-right: 9%;
+}
+
+.prp95{
+    padding-right: 9.5%;
+}
+
+.prp100{
+    padding-right: 10%;
+}
+/*#endregion*/
+
+/*#region padding Top*/
+
+.ptp00{
+    padding-top: 0;
+}
+
+.ptp05{
+    padding-top: 0.5%;
+}
+
+.ptp10{
+    padding-top: 1%;
+}
+
+.ptp15{
+    padding-top: 1.5%;
+}
+
+.ptp20{
+    padding-top: 2%;
+}
+
+.ptp25{
+    padding-top: 2.5%;
+}
+
+.ptp30{
+    padding-top: 3%;
+}
+
+.ptp35{
+    padding-top: 3.5%;
+}
+
+.ptp40{
+    padding-top: 4%;
+}
+
+.ptp45{
+    padding-top: 4.5%;
+}
+
+.ptp50{
+    padding-top: 5%;
+}
+
+.ptp55{
+    padding-top: 5.5%;
+}
+
+.ptp60{
+    padding-top: 6%;
+}
+
+.ptp65{
+    padding-top: 6.5%;
+}
+
+.ptp70{
+    padding-top: 7%;
+}
+
+.ptp75{
+    padding-top: 7.5%;
+}
+
+.ptp80{
+    padding-top: 8%;
+}
+
+.ptp85{
+    padding-top: 8.5%;
+}
+
+.ptp90{
+    padding-top: 9%;
+}
+
+.ptp95{
+    padding-top: 9.5%;
+}
+
+.ptp100{
+    padding-top: 10%;
+}
+/*#endregion*/
+
+/*#region padding Bottom*/
+
+.pbp00{
+    padding-bottom: 0;
+}
+
+.pbp05{
+    padding-bottom: 0.5%;
+}
+
+.pbp10{
+    padding-bottom: 1%;
+}
+
+.pbp15{
+    padding-bottom: 1.5%;
+}
+
+.pbp20{
+    padding-bottom: 2%;
+}
+
+.pbp25{
+    padding-bottom: 2.5%;
+}
+
+.pbp30{
+    padding-bottom: 3%;
+}
+
+.pbp35{
+    padding-bottom: 3.5%;
+}
+
+.pbp40{
+    padding-bottom: 4%;
+}
+
+.pbp45{
+    padding-bottom: 4.5%;
+}
+
+.pbp50{
+    padding-bottom: 5%;
+}
+
+.pbp55{
+    padding-bottom: 5.5%;
+}
+
+.pbp60{
+    padding-bottom: 6%;
+}
+
+.pbp65{
+    padding-bottom: 6.5%;
+}
+
+.pbp70{
+    padding-bottom: 7%;
+}
+
+.pbp75{
+    padding-bottom: 7.5%;
+}
+
+.pbp80{
+    padding-bottom: 8%;
+}
+
+.pbp85{
+    padding-bottom: 8.5%;
+}
+
+.pbp90{
+    padding-bottom: 9%;
+}
+
+.pbp95{
+    padding-bottom: 9.5%;
+}
+
+.pbp100{
+    padding-bottom: 10%;
+}
+/*#endregion*/
+
+/*#region padding Inline*/
+
+.pip00{
+    padding-inline: 0;
+}
+
+.pip05{
+    padding-inline: 0.5%;
+}
+
+.pip10{
+    padding-inline: 1%;
+}
+
+.pip15{
+    padding-inline: 1.5%;
+}
+
+.pip20{
+    padding-inline: 2%;
+}
+
+.pip25{
+    padding-inline: 2.5%;
+}
+
+.pip30{
+    padding-inline: 3%;
+}
+
+.pip35{
+    padding-inline: 3.5%;
+}
+
+.pip40{
+    padding-inline: 4%;
+}
+
+.pip45{
+    padding-inline: 4.5%;
+}
+
+.pip50{
+    padding-inline: 5%;
+}
+
+.pip55{
+    padding-inline: 5.5%;
+}
+
+.pip60{
+    padding-inline: 6%;
+}
+
+.pip65{
+    padding-inline: 6.5%;
+}
+
+.pip70{
+    padding-inline: 7%;
+}
+
+.pip75{
+    padding-inline: 7.5%;
+}
+
+.pip80{
+    padding-inline: 8%;
+}
+
+.pip85{
+    padding-inline: 8.5%;
+}
+
+.pip90{
+    padding-inline: 9%;
+}
+
+.pip95{
+    padding-inline: 9.5%;
+}
+
+.pip100{
+    padding-inline: 10%;
+}
+/*#endregion*/
+
+/*#region padding Outline*/
+.pop00{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.pop05{
+    padding-top: 0.25%;
+    padding-bottom: 0.25%;
+}
+
+.pop10{
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+}
+
+.pop15{
+    padding-top: 0.75%;
+    padding-bottom: 0.75%;
+}
+
+.pop20{
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.pop25{
+    padding-top:1.25%;
+    padding-bottom: 1.25%;
+}
+
+.pop30{
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+}
+
+.pop35{
+    padding-top: 1.75%;
+    padding-bottom: 1.75%;
+}
+
+.pop40{
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.pop45{
+    padding-top:2.25%;
+    padding-bottom: 2.25%;
+}
+
+.pop50{
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+}
+
+.pop55{
+    padding-top: 2.75%;
+    padding-bottom: 2.75%;
+}
+
+.pop60{
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+.pop65{
+    padding-top: 3.25%;
+    padding-bottom: 3.25%;
+}
+
+.pop70{
+    padding-top: 3.5%;
+    padding-bottom: 3.5%;
+}
+
+.pop75{
+    padding-top: 3.75%;
+    padding-bottom: 3.75%;
+}
+
+.pop80{
+    padding-top: 4%;
+    padding-bottom: 4%;
+}
+
+.pop85{
+    padding-top: 4.25%;
+    padding-bottom: 4.25%;
+}
+
+.pop90{
+    padding-top: 4.5%;
+    padding-bottom: 4.5%;
+}
+
+.pop95{
+    padding-top: 4.75%;
+    padding-bottom: 4.75%;
+}
+
+.pop100{
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+/*#endregion*/
+
+/*#region padding*/
+.pp00{
+    padding: 0;
+}
+
+.pp05{
+    padding: 0.5%;
+}
+
+.pp10{
+    padding: 1%;
+}
+
+.pp15{
+    padding: 1.5%;
+}
+
+.pp20{
+    padding: 2%;
+}
+
+.pp25{
+    padding: 2.5%;
+}
+
+.pp30{
+    padding: 3%;
+}
+
+.pp35{
+    padding: 3.5%;
+}
+
+.pp40{
+    padding: 4%;
+}
+
+.pp45{
+    padding: 4.5%;
+}
+
+.pp50{
+    padding: 5%;
+}
+
+.pp55{
+    padding: 5.5%;
+}
+
+.pp60{
+    padding: 6%;
+}
+
+.pp65{
+    padding: 6.5%;
+}
+
+.pp70{
+    padding: 7%;
+}
+
+.pp75{
+    padding: 7.5%;
+}
+
+.pp80{
+    padding: 8%;
+}
+
+.pp85{
+    padding: 8.5%;
+}
+
+.pp90{
+    padding: 9%;
+}
+
+.pp95{
+    padding: 9.5%;
+}
+
+.pp100{
+    padding: 10%;
+}
+/*#endregion*/
+
+/*#endregion*/
+
