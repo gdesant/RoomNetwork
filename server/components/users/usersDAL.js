@@ -85,7 +85,7 @@ class usersDAL {
             where:{
                 id: id,
             },
-            attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'publicAccount', 'publicEmail', 'token'],
+            attributes: ['id', 'username', 'email', 'firstName', 'pp_url', 'pp_settings', 'lastName', 'publicAccount', 'publicEmail', 'token'],
             include: [{
                 model: User,
                 as: 'FriendSend',

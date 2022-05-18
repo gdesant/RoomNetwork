@@ -1,10 +1,25 @@
 <template>
   <div class="main">
     <div class="dashboardMainContent b-clr-5">
-      <div v-if="currentEditView == 'none'" class="emptyDashboardDiv">
-        <h0 class="clr-1">EMPTY DASHBOARD</h0>
-        <h2 class="clr-wht">Use the navbar to navigate throught the website !</h2>
-      </div>
+      <Transition name="slide-up">
+
+        <contactsContainer v-if="currentEditView == 'contacts'" class="emptyDashboardDiv"/>
+        <roomsContainer v-else-if="currentEditView == 'rooms'" class="emptyDashboardDiv"/>
+        <addonsContainer v-else-if="currentEditView == 'addons'" class="emptyDashboardDiv"/>
+
+        <profileContainer v-else-if="currentEditView == 'profile'" class="emptyDashboardDiv"/>
+        <securityContainer v-else-if="currentEditView == 'security'" class="emptyDashboardDiv"/>
+
+        <div v-else class="emptyDashboardDiv">
+          <div class="table hp100 wp100">
+            <div class="table-c">
+              <h0 class="clr-1">EMPTY DASHBOARD</h0>
+              <h2 class="clr-wht">Use the navbar to navigate throught the website !</h2>
+            </div>
+          </div>
+
+        </div>
+      </Transition>
     </div>
     <Navbar v-if="user != null" :user="user"/>
   </div>
@@ -16,9 +31,15 @@ import axios from "axios";
 import {io} from "socket.io-client";
 import Navbar from "@/views/Navbar";
 
+import contactsContainer from "@/views/DashBoardViews/contactsContainer"
+import roomsContainer from "@/views/DashBoardViews/roomsContainer";
+import addonsContainer from "@/views/DashBoardViews/addonsContainer";
+import profileContainer from "@/views/DashBoardViews/profileContainer";
+import securityContainer from "@/views/DashBoardViews/securityContainer";
+
 
 export default {
-  components: {Navbar},
+  components: {Navbar, contactsContainer, roomsContainer, addonsContainer, profileContainer, securityContainer},
   data() {
     return {
       user: null,
@@ -126,18 +147,16 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
 .dashboardMainContent{
-  height: 100vh;
   width: calc(100% - 50px);
   position: absolute;
   top: 0;
   left: 50px;
   display: table;
-  align-self: end;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashboardMainContent::-webkit-scrollbar {
@@ -145,11 +164,68 @@ export default {
 }
 
 .emptyDashboardDiv{
-  width: initial;
-  height: initial;
+  height: 100%;
+  width: 100%;
   display: table-cell;
+  position: absolute;
   vertical-align: middle;
   text-align: center;
 }
+
+.globalDashPanel{
+  width: initial;
+}
+
+.emptyDashPanelMain{
+  display: grid;
+  grid-column-gap: 15px;
+  grid-row-gap: 10px;
+  grid-template-columns: repeat(4, auto);
+  grid-template-rows: repeat(auto-fill, auto);
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: min-content;
+  padding: 10px;
+  border: 3px solid var(--main-color);
+}
+
+.emptyDashPanelMain::-webkit-scrollbar{
+  background-color: var(--fourth-color);
+  padding-left: 3px;
+}
+
+.emptyDashPanelMain::-webkit-scrollbar-thumb{
+  background-color: var(--main-color);
+  border-top: 2px solid var(--fourth-color);
+  border-right: 2px solid var(--fourth-color);
+  border-bottom: 2px solid var(--fourth-color);
+
+}
+
+.emptyDashPanel{
+  display: block;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.emptyDashPanel:hover{
+  transform: scale(1.1);
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(100vh);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-100vh);
+}
+
 
 </style>

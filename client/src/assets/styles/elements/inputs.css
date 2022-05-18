@@ -6,12 +6,12 @@ input{
     color: var(--main-color);
 }
 
-input:invalid {
+stand:not input:invalid {
     background: var(--third-color);
     color: var(--main-color);
 }
 
-input:focus{
+stand:not input:focus{
 
     border-color: var(--success-color);
     outline: none;
@@ -24,7 +24,7 @@ input:-webkit-autofill:active{
     -webkit-box-shadow: 0px 0px 0px 0px transparent inset !important;
 }
 
-input:-webkit-autofill{
+stand:not input:-webkit-autofill{
     -webkit-background-clip: text;
     -webkit-text-fill-color: var(--main-color);
     background-color: var(--third-color);

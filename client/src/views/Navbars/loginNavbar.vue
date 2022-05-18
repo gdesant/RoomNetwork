@@ -3,14 +3,14 @@
     <div class="hp100 fx-r">
       <div class="NavbarSideContent hp100 fx-c " :class="currentSideBarState == true ? 'closedBar' : ''" style="background-color: var(--navbar-color);">
         <div class="hp100 fx-c">
-          <div class="nav-item" id="itemNavTopFriends">
-            <div class="navDropItem tal" :class="(dashView == 'friends') ? 'active' : ''" @click="switchDashView('friends')">
+          <div class="nav-item" id="itemNavTopContact">
+            <div class="navDropItem tal" :class="(dashView == 'contacts') ? 'active' : ''" @click="switchDashView('contacts')">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="user-group" size="xl"></fa>
                 </div>
                 <div class="navSideName">
-                  <h3>Friends</h3>
+                  <h3>Contacts</h3>
                 </div>
               </div>
             </div>
@@ -18,7 +18,7 @@
           <div class="nav-item" id="itemNavTopRooms">
             <div class="navDropItem tal" :class="(dashView == 'rooms') ? 'active' : ''" @click="switchDashView('rooms')">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="person-booth" size="xl"></fa>
                 </div>
                 <div class="navSideName">
@@ -30,7 +30,7 @@
           <div class="nav-item" id="itemNavTopAddons">
             <div class="navDropItem tal" :class="(dashView == 'addons') ? 'active' : ''" @click="switchDashView('addons')">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="puzzle-piece" size="xl"></fa>
                 </div>
                 <div class="navSideName">
@@ -42,7 +42,7 @@
           <div class="nav-item" id="itemNavTopDashboard">
             <div class="navDropItem tal" :class="(dashView == 'dashboard') ? 'active' : ''" @click="switchDashView('dashboard')">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="table" size="xl"></fa>
                 </div>
                 <div class="navSideName">
@@ -53,15 +53,20 @@
           </div>
         </div>
         <div class="hp120 fx-r">
-          <div class="nav-item pe-n" style="width: 200px; height: initial;" id="itemNavProfile">
-            <div class="navDropItem tal pe-n"  style="  height: 200px;  cursor: default" @click="switchDashView('dashboard')">
+          <div class="nav-item pe-n" style="height: initial;" id="itemNavProfile">
+            <div class="navDropItem tal pe-n"  style="height: 200px;  cursor: default">
               <div class="fx-r hp100"  style="  height: 200px;">
                 <div class="navSideIcon  wp20" style="  height: 200px;">
                   <fa icon="user" size="xl"></fa>
                 </div>
-                <div class="navSideName b-clr-1 clr-4 wp80 tac" style="height: 200px;">
-                  <h1 class="mip0a mop20">{{ user.username }}</h1>
-                  <h3 class="mip0a mop10">{{ user.email }}</h3>
+                <div class="navSideName b-clr-1 clr-4 wp80 tac" style="height: 200px; width: 160px">
+                  <div style="height: 150px; width: 100%" class="b-clr-4">
+                    <img :src="user.pp_url" class="pp">
+                  </div>
+                  <div style="height: 50px; width: 100%">
+                    <h2 class="mip00 mop00">{{ user.username }}</h2>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -72,7 +77,7 @@
           <div class="nav-item" id="itemNavBotLogout">
             <div class="navDropItem tal" @click="logoutDash()">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon slideItem">
                   <fa icon="arrow-right-from-bracket" size="xl"></fa>
                 </div>
                 <div class="navSideName">
@@ -84,7 +89,7 @@
           <div class="nav-item" id="itemNavBotSecurity">
             <div class="navDropItem tal" :class="(dashView == 'security') ? 'active' : ''" @click="switchDashView('security')">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="fingerprint" size="xl"></fa>
                 </div>
                 <div class="navSideName">
@@ -94,13 +99,13 @@
             </div>
           </div>
           <div class="nav-item" id="itemNavBotSettings">
-            <div class="navDropItem tal" :class="(dashView == 'settings') ? 'active' : ''" @click="switchDashView('settings')">
+            <div class="navDropItem tal" :class="(dashView == 'profile') ? 'active' : ''" @click="switchDashView('profile')">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="gears" size="xl"></fa>
                 </div>
                 <div class="navSideName">
-                  <h3>User Settings</h3>
+                  <h3>Profile</h3>
                 </div>
               </div>
             </div>
@@ -108,7 +113,7 @@
           <div class="nav-item" id="itemNavBotLight">
             <div class="navDropItem tal" @click="changeMode()">
               <div class="fx-r">
-                <div class="navSideIcon">
+                <div class="navSideIcon navSideIconAnim">
                   <fa icon="lightbulb" size="xl"></fa>
                 </div>
                 <div class="navSideName">
@@ -171,6 +176,15 @@ export default {
 
 }
 
+.pp{
+  height: 120px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  width: auto;
+  border-radius: 50%;
+  border: solid 3px var(--main-color);
+}
+
 
 .openerSideBar{
   width: 100px;
@@ -214,7 +228,7 @@ export default {
 }
 
 .NavbarSideContent{
-  width: initial;
+  width: 210px;
   overflow-x: hidden;
   overflow-y: auto;
   transition: all 0.3s ease-in-out;
@@ -229,7 +243,6 @@ export default {
 
 .closedBar{
   width: 50px;
-  transition: all 0.1s ease-in-out;
 }
 
 .navSideIcon{
@@ -239,7 +252,37 @@ export default {
   flex-direction:column;
   justify-content: center;
   align-items:center;
+  transition: all 0.2s ease-in-out;
 }
+
+.navDropItem:hover .navSideIconAnim{
+  transform: scale(125%) rotate(0deg);
+}
+
+.closedBar .navDropItem:hover .navSideIconAnim{
+  transform: scale(100%) rotate(-20deg) translate3d(0, -1vh, 0);
+}
+
+.active:hover  .navSideIconAnim{
+  transform: scale(1) rotate(0);
+}
+
+.closedBar .active:hover  .navSideIconAnim{
+  transform: scale(1) rotate(0);
+}
+
+.navDropItem:hover  .slideItem{
+  -webkit-animation: slideInOut 0.3s forwards; /* for less modern browsers */
+  animation: slideInOut 0.3s forwards;
+}
+
+.closedBar .navDropItem:hover  .slideItem{
+  -webkit-animation: slideInOut 0.3s forwards; /* for less modern browsers */
+  animation: slideInOut 0.3s forwards;
+}
+
+
+
 
 .navSideName{
   height: 75px;
@@ -261,5 +304,24 @@ export default {
   align-items:center
 }
 
+@-webkit-keyframes slideInOut {
+
+  0% {
+    transform: scale(1) rotate(0) translate3d(0, 0, 0);
+    -webkit-transform: scale(1) rotate(0) translate3d(0, 0, 0);
+  }
+  25% {
+    transform: scale(1) rotate(0) translate3d(0.5vw, 0, 0);
+    -webkit-transform: scale(1) rotate(0) translate3d(0.5vw, 0, 0);
+  }
+  75% {
+    transform: scale(1) rotate(0) translate3d(-0.5vw, 0, 0);
+    -webkit-transform: scale(1) rotate(0) translate3d(-0.5vw, 0, 0);
+  }
+  100% {
+    transform: scale(1) rotate(0) translate3d(0.5vw, 0, 0);
+    -webkit-transform: scale(1) rotate(0) translate3d(0.5vw, 0, 0);
+  }
+}
 
 </style>
