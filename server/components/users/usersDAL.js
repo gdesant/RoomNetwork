@@ -89,13 +89,13 @@ class usersDAL {
             include: [{
                 model: User,
                 as: 'FriendSend',
-                attributes: ['id', 'username'],
+                attributes: ['id', 'username', 'pp_url', 'pp_settings'],
                 through: {attributes: ['status', 'id', 'updatedAt']},
                 required: false
             },{
                 model: User,
                 as: 'FriendReceive',
-                attributes: ['id', 'username'],
+                attributes: ['id', 'username', 'pp_url', 'pp_settings'],
                 through: {attributes: ['status', 'id', 'updatedAt']},
                 required: false
             },{
@@ -133,8 +133,8 @@ class usersDAL {
             user.user = init.toJSON()
             delete user.user.FriendSend
             delete user.user.FriendReceive
-            user.user.FriendSend = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status == 0);
-            user.user.FriendReceive = init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status == 0);
+            user.user.FriendSend = init.toJSON().FriendSend
+            user.user.FriendReceive = init.toJSON().FriendReceive
             user.user.CreatedRooms = init.toJSON().CreatedRooms.filter(r => r.type != 2);
             user.user.JoinedRooms = init.toJSON().JoinedRooms.filter(r => r.type != 2);
             user.user.Friends = init.toJSON().FriendSend.filter(fr => fr.friendsrequests.status === 1).concat(init.toJSON().FriendReceive.filter(fr => fr.friendsrequests.status === 1))

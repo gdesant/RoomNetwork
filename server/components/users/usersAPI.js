@@ -18,7 +18,7 @@ router.get("/un/:id", async function(req, res) {
 });
 
 router.get("/:id", async function(req, res) {
-    let result = await usersController.getUserById(req.params.id, ['id', 'username' ,'email']);
+    let result = await usersController.getUserById(req.params.id, ['id', 'username', 'pp_url', 'pp_settings']);
     res.send(result);
 });
 

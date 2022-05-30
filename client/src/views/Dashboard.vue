@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <div class="dashboardMainContent b-clr-5">
+    <div class="dashboardMainContent b-clr-5" v-if="user != null">
       <Transition name="slide-up">
 
-        <contactsContainer v-if="currentEditView == 'contacts'" class="emptyDashboardDiv"/>
+        <contactsContainer v-if="currentEditView == 'contacts'" :contacts="user.Friends" :contactReceive="user.FriendReceive" :contactSend="user.FriendSend" class="emptyDashboardDiv"/>
         <roomsContainer v-else-if="currentEditView == 'rooms'" class="emptyDashboardDiv"/>
         <addonsContainer v-else-if="currentEditView == 'addons'" class="emptyDashboardDiv"/>
 
@@ -21,7 +21,9 @@
         </div>
       </Transition>
     </div>
+    <chatPop :socket="socket" :userid="user.id"/>
     <Navbar v-if="user != null" :user="user"/>
+
   </div>
 </template>
 
@@ -31,15 +33,16 @@ import axios from "axios";
 import {io} from "socket.io-client";
 import Navbar from "@/views/Navbar";
 
-import contactsContainer from "@/views/DashBoardViews/contactsContainer"
+import contactsContainer from "@/views/DashBoardViews/contactsViews/contactsContainer"
 import roomsContainer from "@/views/DashBoardViews/roomsContainer";
 import addonsContainer from "@/views/DashBoardViews/addonsContainer";
 import profileContainer from "@/views/DashBoardViews/profileContainer";
 import securityContainer from "@/views/DashBoardViews/securityContainer";
+import chatPop from "@/views/DashBoardViews/chatsViews/chatPop";
 
 
 export default {
-  components: {Navbar, contactsContainer, roomsContainer, addonsContainer, profileContainer, securityContainer},
+  components: {Navbar, contactsContainer, roomsContainer, addonsContainer, profileContainer, securityContainer, chatPop},
   data() {
     return {
       user: null,
@@ -180,11 +183,11 @@ export default {
   display: grid;
   grid-column-gap: 15px;
   grid-row-gap: 10px;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(4, 255px);
   grid-template-rows: repeat(auto-fill, auto);
   overflow-x: hidden;
   overflow-y: auto;
-  width: min-content;
+  width: 1062px;
   padding: 10px;
   border: 3px solid var(--main-color);
 }

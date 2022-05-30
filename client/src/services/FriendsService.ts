@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url =  "http://192.168.1.15:5000/friends"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
+const url =  "http://192.168.1.10:5000/friends"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
 axios.defaults.headers.post['Accept'] = 'application/json,text/plain, */*'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 

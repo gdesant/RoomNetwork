@@ -87,7 +87,7 @@ app.use('/messages/', message)
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, '192.168.1.15', function () {
+app.listen(port, '192.168.1.10', function () {
     console.log("Server SQL started on port " + port);
 });
 

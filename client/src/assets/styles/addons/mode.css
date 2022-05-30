@@ -18,7 +18,7 @@
 
     --icon-color: var(--main-color);
     --icon-b-color: var(--fourth-color);
-    --icon-color-hover: var(--secondary-color);
+    --icon-color-hover: var(--main-color);
     --icon-b-color-hover: var(--fourth-color-hover);
     --icon-color-active: var(--fourth-color);
     --icon-b-color-active: var(--main-color);
@@ -42,7 +42,7 @@
 
     --icon-color: var(--main-color);
     --icon-b-color: var(--fourth-color);
-    --icon-color-hover: var(--main-color-hover);
+    --icon-color-hover: var(--main-color-o75);
     --icon-b-color-hover: var(--fourth-color-hover);
     --icon-color-active: var(--fourth-color);
     --icon-b-color-active: var(--main-color);

@@ -1,6 +1,6 @@
 import axios from 'axios';
-const authUrl =  "http://192.168.1.15:5000/auth"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
-const msgUrl =  "http://192.168.1.15:5000/messages"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
+const authUrl =  "http://192.168.1.10:5000/auth"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
+const msgUrl =  "http://192.168.1.10:5000/messages"//process.env.API_URL ||'https://hexwar-dev.herokuapp.com/';
 
 class MessagesService {
     static async sendRoomMessage(userId: number, roomId: number, content: string) {

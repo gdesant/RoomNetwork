@@ -62,8 +62,7 @@ class RoomsController {
             return ({error: "There is no user with the id " + id2})
 
         let include= [
-            {model: User, as: 'Owner', attributes: ['id', 'username']},
-            {model: User, as: 'Members', attributes: ['id', 'username'], through: {attributes: []}},
+            {model: User, as: 'Members', attributes: ['id', 'username', 'pp_url', 'pp_settings'], through: {attributes: []}},
             {model: Message ,as: 'Messages', attributes: ['id', 'content', 'createdAt', 'senderUsername'], limit: 25, order: [['createdAt', 'DESC']]},
             {model: Addon, as: 'Addons'}
         ]

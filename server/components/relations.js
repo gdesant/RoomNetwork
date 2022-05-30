@@ -92,6 +92,9 @@ Message.prototype.cleanForChat = async function(clause){
 //#region Init
 async function initSequelize() {
     console.log("Model Synchronization :");
+
+    const      user_Count = 10;
+
     await process.sequelize.sync({
         force: true
     })
@@ -102,7 +105,7 @@ async function initSequelize() {
 
 
     console.log("User creation ...");
-    for (var i = 0; i++ < 5;)
+    for (var i = 0; i++ < user_Count;)
     {
         var user = await User.build({id: i, username: "user_" + (i), password: 'password', email: "email_" + (i)})
         await user.save()
@@ -118,7 +121,7 @@ async function initSequelize() {
 
     console.log("Rooms created");
     console.log("FriendShipRequest creation ...");
-    for (var i = 1; i++ < 5;) {
+    for (var i = 1; i++ < user_Count;) {
         if (i != 1)
         {
             var fr = await FriendShipRequest.build({senderId: 1, receiverId: i, status: 1,})
@@ -142,7 +145,7 @@ async function initSequelize() {
 }
 //#endregion
 
-initSequelize()
+//initSequelize()
 
 
 module.exports = { User, Room, RoomRequest, FriendShipRequest, Message, Addon };
