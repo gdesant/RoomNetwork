@@ -1,28 +1,28 @@
 <template>
-  <div  class="mainChatPop">
-    <div class="fx-cr chatsIconsDiv">
-      <div class="table chatAddIco b-clr-1">
-        <div class="table-c">
-          <fa  size="xl"  icon="plus"/>
-        </div>
-      </div>
-      <transition-group name="listIco">
-        <div v-for="chat in sidedChats" :key="chat.name" class="table chatAddIco chatSideIco b-clr-1">
-          <div class="table-c pe-auto " @click="sideChat(chat)">
-            <img class="chatImg" height="55" width="55" :src="chat.url">
-          </div>
-        </div>
-      </transition-group>
-
-      <div class="table chatAddIco chatSettIco b-clr-1">
-        <div class="table-c">
-          <fa  icon="ellipsis"/>
-        </div>
+  <div class="fx-cr chatsIconsDiv">
+    <div class="table chatAddIco b-clr-1">
+      <div class="table-c">
+        <fa  size="xl"  icon="plus"/>
       </div>
     </div>
+    <transition-group name="listIco">
+      <div v-for="chat in sidedChats" :key="chat.name" class="table chatAddIco chatSideIco b-clr-1">
+        <div class="table-c pe-auto " @click="sideChat(chat)">
+          <img class="chatImg" height="55" width="55" :src="chat.url">
+        </div>
+      </div>
+    </transition-group>
+
+    <div class="table chatAddIco chatSettIco b-clr-1">
+      <div class="table-c">
+        <fa  icon="ellipsis"/>
+      </div>
+    </div>
+  </div>
+  <div  class="mainChatPop">
     <div class="fx-rr chatPotDiv">
       <transition-group name="list">
-        <div  class="chatPop list-item"  :class="[chat.isMinus == true ? 'downChatPop'  : '', chat.isSided == true ? 'sideChat' : '']" v-for="chat in chats" :key="chat.name">
+        <div  class="chatPop list-item"  :class="[chat.isMinus == true ? 'downChatPop'  : '', chat.isSided == true ? 'sideChat' : '']" v-for="chat in chats" :key="chat.name" v-on:load="updateChatInputRatio(chat.name)" ref="chats">
           <div class="fx-r wp100 hp10" style="background-color: var(--main-color);text-align: center">
             <div class="wp70 hp100 tal">
               <h3  class="pop00 mop00 mlp25">{{chat.name}}</h3>
@@ -48,15 +48,20 @@
               </div>
             </div>
           </div>
-          <div class="fx-c wp100 hp90">
-            <div class="fx-c wp100 hinp50 haxp95 messagesContainer" style="background-color: var(--fourth-color); overflow-x: hidden; overflowy: auto">
-              {{chat.data}}
-              {{chat.data}}
-              {{chat.data}}
+          <div :ref="'chatPopBot_' + chat.name" class="fx-c wp100 hp90">
+            <div :ref="'MessagesContainer_' + chat.name">
+              <div class="fx-c messagesContainer" v-if="chat.ptype">
+                <div  v-for="message in chat.data.Messages" :key="message.id" class="messageDiv" :class="message.senderId  ? (message.senderId == userid ? 'selfMsg' : 'otherMsg') : 'otherMsg'">
+                  <h5 class="wp100">{{message.content}}</h5>
+                </div>
+              </div>
+              <div class="fx-c messagesContainer clr-wht" v-else>
+                <h4 style="padding: 10%">Send a message to initiate the conversation !</h4>
+              </div>
             </div>
-            <div class="fx-r wp100 b-clr-1" style="border-top: 3px solid var(--main-color); height: initial">
+            <div :ref="'MessagesInputContainer_' + chat.name" class="fx-r wp100 b-clr-1" style="border-top: 3px solid var(--main-color); height: initial">
               <div class="wp90 mrp10" style="height: initial;">
-                <textarea class="wp100 clr-wht transition02 taMsg" v-model="chat.textInput" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' onfocusin='this.style.height = "";this.style.height = this.scrollHeight + "px"' type="text" maxlength="250"></textarea>
+                <textarea :ref="'MessagesInput_' + chat.name" class="wp100 clr-wht transition02 taMsg" v-model="chat.textInput" v-on:load="updateChatInputRatio(chat.name)" v-on:keydown.enter.ctrl="sendMessage(chat)" v-on:input="updateChatInputRatio(chat.name)" v-on:focusin="updateChatInputRatio(chat.name)" type="text" maxlength="250"></textarea>
               </div>
               <div  class="table wp10 mlp50 mrp50 hp100">
                 <div  class="table-c  pe-auto transition02 sendEffect clr-3" @click="sendMessage(chat)">
@@ -80,7 +85,7 @@ import RoomsService from "@/services/RoomsService";
 import UsersService from "@/services/UsersService";
 import MessagesService from "@/services/MessagesService";
 
-//const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default {
   name: "ChatPop",
@@ -95,9 +100,32 @@ export default {
     }
   },
   created(){
+    let self = this
+
     this.emitter.on("openChatWith", this.openChat);
+
+    this.$props.socket.on('newMessage', function (data){
+      console.log('NewMessage')
+      self.addChatMessage(data.messageId)
+    })
   },
   methods:{
+    async addChatMessage(messagesId){
+      const msg = await MessagesService.getMessageById(messagesId)
+
+      let chatss  =  this.$data.chats.findIndex(element => element.data.id == msg.roomId)
+      let sschat  =  this.$data.sidedChats.findIndex(element => element.data.id == msg.roomId)
+
+      if(chatss != -1)
+        this.$data.chats[chatss].data.Messages.push(msg);
+      else if (sschat != -1)
+        this.$data.sidedChats[sschat].data.Messages.push(msg);
+
+
+      console.log("Receiving new Message !")
+      console.log(msg)
+      return
+    },
     initChat(data, type){
       let Room = {};
 
@@ -139,6 +167,8 @@ export default {
         {
           console.log(Room)
           this.$data.chats.push(Room)
+          await delay(100)
+          this.updateChatInputRatio(Room.name)
         }
         else
           console.log('Chat already open !')
@@ -148,17 +178,38 @@ export default {
     },
     async sendMessage(data){
       let msg = null;
+      let  index = this.$data.chats.indexOf(data);
 
-      if (data.ptype == true)
-        msg = await MessagesService.sendRoomMessage(this.$props.userid, data.data.id, data.textInput)
+      if (data.ptype == true){
+        await MessagesService.sendRoomMessage(this.$props.userid, data.data.id, data.textInput)
+        if(msg != false)
+        {
+          this.$data.chats[index].textInput = '';
+        }
+
+      }
       else
+      {
         msg = await MessagesService.sendNewRoomMessage(this.$props.userid, data.data.id, data.textInput)
 
-      console.log("Envoie de nouveau message :")
-      console.log(msg)
+        if(!msg)
+          return
+
+        this.$data.chats[index] = this.initChat(msg,true)
+
+        this.$props.socket.emit('join_room', {id: this.$data.chats[index].data.id})
+
+        if(msg != false)
+        {
+          this.$data.chats[index].textInput = '';
+        }
+
+      }
+
+
 
     },
-    sideChat(data){
+    async sideChat(data){
 
       let sendchat = null;
       let receivechat = null;
@@ -185,6 +236,8 @@ export default {
       {
         this.$data.sidedChats = sendchat;
         this.$data.chats = receivechat;
+        await delay(100)
+        this.updateChatInputRatio(data.name)
       }
       else //Side
       {
@@ -204,7 +257,14 @@ export default {
       let index =  this.$data.chats.indexOf(data)
       this.$data.chats.splice(index,1)
     },
-  }
+    updateChatInputRatio(name){
+      this.$refs['MessagesInput_' + name].style.height = ""; this.$refs['MessagesInput_' + name].style.height = this.$refs['MessagesInput_' + name].scrollHeight + "px";
+      this.$refs['MessagesContainer_' + name].style.height = ""; this.$refs['MessagesContainer_' + name].style.height = (this.$refs['chatPopBot_' + name].clientHeight - this.$refs['MessagesInputContainer_' + name].clientHeight) + "px"
+
+
+    }
+
+  },
 
 }
 </script>
@@ -212,15 +272,17 @@ export default {
 <style scoped>
 
 .messagesContainer{
-
+  height: 100%;
   width: 90%;
   padding-left: 2.5%;
   padding-right: 7.5%;
+  background-color: var(--fourth-color);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .messagesContainer::-webkit-scrollbar{
-  background-color: var(--fourth-color);
-  padding-left: 3px;
+  background-color: var(--third-color);
 }
 
 .messagesContainer::-webkit-scrollbar-thumb{
@@ -228,7 +290,28 @@ export default {
   border-top: 2px solid var(--fourth-color);
   border-right: 2px solid var(--fourth-color);
   border-bottom: 2px solid var(--fourth-color);
+}
 
+.messageDiv{
+  width: 210px;
+  height: initial;
+  padding: 5px 4px;
+  margin: 10px 0;
+  color: var(--white-color);
+  word-wrap: break-word;
+  display:flex;
+}
+
+.selfMsg{
+  background-color: var(--secondary-color);
+  padding-right: 25px;
+  margin-left: 25px;
+}
+
+.otherMsg{
+  background-color: var(--third-color);
+  padding-left: 25px;
+  margin-left: -25px;
 }
 
 
@@ -237,9 +320,10 @@ export default {
   width: auto;
   display: flex;
   flex-direction: row-reverse;
+  overflow-x: visible;
   position: absolute;
   bottom: 0px;
-  right: 0;
+  right: 125px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -278,10 +362,12 @@ export default {
 
 .chatsIconsDiv{
   width: 100px;
-  height: inherit;
-  transform: translateY(-25px);
+  height: 100vh;
+  position: absolute;
   bottom: 15px;
-  z-index: 1;
+  right: 15px;
+  z-index: 0;
+  background-color: transparent;
 }
 
 .chatAddIco{
@@ -325,21 +411,25 @@ export default {
 }
 
 .listIco{
+  transition: all 0.1s ease-in-out;
 }
 
 .listIco-enter-from, .listIco-leave-to /* .list-leave-active below version 2.1.8 */ {
   opacity: 0;
-  transform: translateX(10vh);
+  transform: translateX(-10vh);
 }
 
 .taMsg{
-  font-size:13px;
+
   resize: none;
   outline: none;
   border-radius: 4px;
   background-color: var(--third-color);
   border: 1px solid;
   border-color: transparent;
+  font-family: 'Akshar', sans-serif;
+  font-size:16px;
+  font-weight: 100;
 }
 
 .taMsg:focus{

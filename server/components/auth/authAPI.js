@@ -12,12 +12,12 @@ const io = require('../socketio').get()
 router.post("/msg/new", async function(req, res) {
     let result = await messagesController.createMessage(req.body);
     if(result === 400) {
-        res.status(result).send('Not enough parameters')
+        res.status(result).send('too short')
     } else if(result === 409) {
-        res.status(result).send('Username is already taken')
+        res.status(result).send('too long')
     } else {
         console.log('New Messages :')
-        io.sockets.in('room_'+ result.dataValues.roomId.toString()).emit('newMessage', {messageId: result.dataValues.id})
+        io.sockets.in('room_'+ result.dataValues.roomId.toString()).emit('newMessage', {messageId: result.dataValues.id, roomId: result.dataValues.roomId})
         res.send(result);
     }
 });
@@ -25,9 +25,9 @@ router.post("/msg/new", async function(req, res) {
 router.post("/msg/neR", async function(req, res) {
     let result = await messagesController.createRoomAndMessage(req.body);
     if(result === 400) {
-        res.status(result).send('Not enough parameters')
+        res.status(result).send('too short')
     } else if(result === 409) {
-        res.status(result).send('Username is already taken')
+        res.status(result).send('too long')
     } else {
         res.send(result);
     }

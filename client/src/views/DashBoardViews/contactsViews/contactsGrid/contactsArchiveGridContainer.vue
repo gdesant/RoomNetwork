@@ -18,6 +18,7 @@ export default {
   name: "ContactsArchivedGridContainer",
   props: {
     contacts: Object,
+    changeStatus: Function,
   },
   created() {
     console.log(this.$props.contacts)

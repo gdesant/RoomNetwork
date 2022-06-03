@@ -39,6 +39,14 @@ h4{
     font-family: 'Akshar', sans-serif;
 }
 
+h5{
+    font-weight: 150;
+    padding: 1px;
+    margin: 0;
+    font-size: 20px;
+    font-family: 'Akshar', sans-serif;
+}
+
 a{
     font-weight: 200;
     font-size: calc((1.1vh + 1.1vw)*0.9);

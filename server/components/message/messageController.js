@@ -40,6 +40,12 @@ class MessageController {
 
     static async createRoomAndMessage(body) {
         console.log("\tMessageController@createRoomAndMessage");
+
+        if(body.content.length == 0)
+            return 400
+        else if (body.content.length > 254)
+            return 409
+
         const room = await roomDAL.create({type: 2})
 
         const id = room.dataValues.id
@@ -48,7 +54,7 @@ class MessageController {
         let bd = {
             content: body.content,
             roomId: id,
-            senderId: body.ownerId,
+            senderId: body.senderId,
             username: user.dataValues.username,
         }
 
@@ -56,7 +62,7 @@ class MessageController {
 
 
 
-        const roomreq = await roomrequestDal.create(id, body.ownerId)
+        const roomreq = await roomrequestDal.create(id, body.senderId)
         await roomreq.addMessages(message)
 
         await roomrequestDal.create(id, body.userId)
@@ -69,8 +75,14 @@ class MessageController {
 
     static async createMessage(body) {
         console.log("\tMessageController@createMessage");
-        const roomreq = await roomrequestDal.findOne({senderId: body.userId, roomId: body.roomId})
-        const user = await usersController.getUserById(body.userId, ['username'])
+
+        if(body.content.length == 0)
+            return 400
+        else if (body.content.length > 254)
+                return 409
+
+        const roomreq = await roomrequestDal.findOne({senderId: body.senderId, roomId: body.roomId})
+        const user = await usersController.getUserById(body.senderId, ['username'])
         body.username = user.dataValues.username
         const message = await messageDAL.create(body)
 

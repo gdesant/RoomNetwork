@@ -124,7 +124,7 @@ async function initSequelize() {
     for (var i = 1; i++ < user_Count;) {
         if (i != 1)
         {
-            var fr = await FriendShipRequest.build({senderId: 1, receiverId: i, status: 1,})
+            var fr = await FriendShipRequest.build({senderId: i, receiverId: 1, status: Math.floor(Math.random() * 4),})
             await fr.save()
         }
     }
@@ -145,7 +145,7 @@ async function initSequelize() {
 }
 //#endregion
 
-//initSequelize()
+initSequelize()
 
 
 module.exports = { User, Room, RoomRequest, FriendShipRequest, Message, Addon };

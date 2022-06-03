@@ -3,7 +3,7 @@
     <div class="dashboardMainContent b-clr-5" v-if="user != null">
       <Transition name="slide-up">
 
-        <contactsContainer v-if="currentEditView == 'contacts'" :contacts="user.Friends" :contactReceive="user.FriendReceive" :contactSend="user.FriendSend" class="emptyDashboardDiv"/>
+        <contactsContainer v-if="currentEditView == 'contacts' && renderContacts" :contacts="user.Friends" :contactReceive="user.FriendReceive" :contactSend="user.FriendSend" class="emptyDashboardDiv"/>
         <roomsContainer v-else-if="currentEditView == 'rooms'" class="emptyDashboardDiv"/>
         <addonsContainer v-else-if="currentEditView == 'addons'" class="emptyDashboardDiv"/>
 
@@ -21,7 +21,7 @@
         </div>
       </Transition>
     </div>
-    <chatPop :socket="socket" :userid="user.id"/>
+    <chatPop v-if="user != null &&  socket !=null" :socket="socket" :userid="user.id"/>
     <Navbar v-if="user != null" :user="user"/>
 
   </div>
@@ -39,6 +39,7 @@ import addonsContainer from "@/views/DashBoardViews/addonsContainer";
 import profileContainer from "@/views/DashBoardViews/profileContainer";
 import securityContainer from "@/views/DashBoardViews/securityContainer";
 import chatPop from "@/views/DashBoardViews/chatsViews/chatPop";
+import FriendsService from "@/services/FriendsService";
 
 
 export default {
@@ -49,6 +50,7 @@ export default {
       users: '',
       socket : null,
       currentEditView: 'none',
+      renderContacts: true,
     }
   },
   async mounted(){
@@ -68,6 +70,7 @@ export default {
 
     this.emitter.on("logout", this.logoutDash);
     this.emitter.on("navbarDashView", this.changeView)
+    this.emitter.on("updateFriendRequest",  this.updateFriendRequest)
   },
   methods: {
     logoutDash(){
@@ -116,6 +119,40 @@ export default {
         this.message = err.response.data
       }
     },
+    async updateFriendRequest(data){
+      let  buff = await FriendsService.update(data.id, data.status)
+      console.log('Id: ' + data.id + ' | Status: '  +  data.status)
+      console.log('Update: ' + buff)
+      if(buff == false)
+        return
+
+
+      let index = this.$data.user.FriendReceive.findIndex(element =>  element.friendsrequests.id == data.id)
+      console.log('FriendReceive index: ' + index)
+      if(index >= 0){
+        this.$data.user.FriendReceive[index]  =  await FriendsService.getFriendsRequestById(data.id)
+      }
+
+      index = this.$data.user.FriendSend.findIndex(element =>  element.friendsrequests.id == data.id)
+      console.log('FriendSend index: ' + index)
+      if(index >= 0){
+        this.$data.user.FriendSend[index]  = await FriendsService.getFriendsRequestById(data.id)
+      }
+
+      index = this.$data.user.Friends.findIndex(element =>  element.friendsrequests.id == data.id)
+      if(index  != -1 && data.status != 1)
+        this.$data.user.Friends.splice(index, 1)
+
+    },
+    forceRerender() {
+      // Remove my-component from the DOM
+      this.renderContacts = false;
+
+      this.$nextTick(() => {
+        // Add the component back in
+        this.renderContacts = true;
+      });
+    }
   },
   async created() {
 

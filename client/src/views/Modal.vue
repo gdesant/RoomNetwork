@@ -1,24 +1,26 @@
 <template>
   <div class="hinp100 winp100" :class="isOpen == true ? 'block' : 'invisible'">
+    <div class="modalBack" @click="isOpen = false">
 
-    <div class="modalBack" @click="isOpen = false"></div>
-    <div class="modalBase">
-      <logoutModal v-if="isOpen && modalType == 'logoutModal'"/>
     </div>
+    <logoutModal v-if="isOpen && modalType == 'logoutModal'"/>
+    <statusFriendModal v-if="isOpen && modalType == 'statusFriendsModal'  && modalData != null"  :modalData="modalData"/>
   </div>
 
 </template>
 
 <script>
 import logoutModal from "@/views/Modals/logoutModal";
+import statusFriendModal from "@/views/Modals/Contacts/statusFriendModal"
 
 export default{
   name: "Modal.vue",
-  components: {logoutModal},
+  components: {logoutModal, statusFriendModal},
   data(){
     return {
       isOpen: false,
       modalType: '',
+      modalData: null,
     }
   },
   mounted() {
@@ -29,11 +31,15 @@ export default{
     closeModal(){
       this.$data.isOpen = false;
       this.$data.modalType = '';
+      this.$data.modalData = null;
 
     },
     openModal(data){
       this.$data.isOpen = true;
       this.$data.modalType = data.type;
+      this.$data.modalData = data.modalData;
+
+
     }
   }
 }
@@ -55,10 +61,6 @@ export default{
   background-color: var(--fifth-color);
   -webkit-box-shadow: rgba(240, 240, 243, 0.1) 0px 7px 29px 0px;
   box-shadow: rgba(246, 246, 248, 0.1) 0px 7px 29px 0px;
-  margin: 25vh 25vw;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .modalButton{

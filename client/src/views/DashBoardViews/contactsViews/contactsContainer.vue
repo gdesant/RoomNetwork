@@ -7,9 +7,9 @@
       <h3 class="mop0a">Here you can add, remove and manage your contacts !</h3>
     </div>
     <div style="width: 1088px; height: 60%" class="mip0a">
-      <div class="hp10 wp100 b-clr-1">
+      <div class="hp15 wp100 b-clr-1">
         <div class="hp100 wp100">
-          <div class="hp100 mip0a fx-r" style="width: calc(100% - 6px); height: calc(100% - 3px); border: 3px solid var(--main-color); flex-grow: 0; flex-shrink: 0">
+          <div class="hp85 mip0a fx-r" style="width: calc(100% - 6px); height: calc(65% - 3px); border: 3px solid var(--main-color); flex-grow: 0; flex-shrink: 0">
             <div class="hp100 b-clr-1" style="width: calc(1088px*0.7)">
               <input class="hp100 pop00 pip20 mip0a stand" style="width: 96%; border: none" placeholder="Username / Email ...">
             </div>
@@ -40,13 +40,14 @@
 
             </div>
           </div>
+          <div class="hp15 b-clr-1"><h4   class="mop00 pop00">{{selected}}</h4></div>
         </div>
       </div>
 
-      <ContactsGridContainer :contacts="contacts" v-if="selected == 'contacts'"/>
-      <ContactsAddGridContainer :contacts="contactReceive.filter(x => x.friendsrequests.status == 0)" v-if="selected == 'contactsAdd'"/>
-      <ContactsBanGridContainer :contacts="contactReceive.filter(x => x.friendsrequests.status == 2)" v-if="selected == 'contactsBan'"/>
-      <ContactsArchivedGridContainer :contacts="contactSend.filter(x => x.friendsrequests.status == 0)" v-if="selected == 'contactsArchived'"/>
+      <ContactsGridContainer :changeStatus="changeStatus"  :contacts="contacts" v-if="selected == 'contacts'"/>
+      <ContactsAddGridContainer :changeStatus="changeStatus" :contacts="contactReceive.filter(x => x.friendsrequests.status == 0)" v-if="selected == 'contactsAdd'"/>
+      <ContactsBanGridContainer :changeStatus="changeStatus" :contacts="contactReceive.filter(x => x.friendsrequests.status == 3)" v-if="selected == 'contactsBan'"/>
+      <ContactsArchivedGridContainer :changeStatus="changeStatus" :contacts="contactSend.filter(x => x.friendsrequests.status == 0)" v-if="selected == 'contactsArchived'"/>
 
     </div>
 
@@ -79,9 +80,30 @@ export default {
       selected:'contacts',
     }
   },
+  methods:{
+    changeStatus(data) {
+
+      console.log('Change Status of : ')
+      console.log(data.contact)
+      console.log(' to '  + data.status)
+
+/*
+      if  (!data.contact || !data.status){
+
+        return
+      }
+      if (data.modalACK == true)
+        this.emitter.emit("openModal", {type: 'statusFriendsModal', modalData: {contact: data.contact, status:  data.status}});
+      else
+        this.emitter.emit('updateFriendRequest', {id: data.contact.friendsrequests.id  , status: data.status})
+
+ */
+    },
+  },
   created() {
     console.log('Created Contacts')
     console.log(this.$props.contacts)
+    this.emitter.on('changeFRStatus', this.changeStatus)
   }
 
 }
