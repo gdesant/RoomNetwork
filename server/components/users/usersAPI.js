@@ -7,8 +7,13 @@ router.get("/", async function(req, res) {
     res.send(result);
 });
 
-router.get("/all/sw/:name/:id", async function(req, res) {
-    let result = await usersController.getUsersStartWith(req.params.name, req.params.id);
+router.get("/all/sw/:name/:id?", async function(req, res) {
+    if (!req.params.id)
+        return await usersController.getUsersStartWith(req.params.name, null);
+
+    let  user  =  await usersController.getUserById(req.params.id,   ['id'])
+    let  ids =  await user.getStartWith()
+    let  result = await usersController.getUsersStartWith(req.params.name, ids);
     res.send(result);
 });
 

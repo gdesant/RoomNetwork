@@ -48,7 +48,7 @@ export default{
 <style>
 
 .modalBack{
-  background-color: var(--fourth-color);
+  background-color: rgba(var(--bcolor-1), 1);
   opacity: 85%;
   min-height: 100vh;
   min-width: 100vw;
@@ -58,7 +58,7 @@ export default{
 }
 
 .modalBase{
-  background-color: var(--fifth-color);
+  background-color: rgba(var(--bcolor-3), 1);
   -webkit-box-shadow: rgba(240, 240, 243, 0.1) 0px 7px 29px 0px;
   box-shadow: rgba(246, 246, 248, 0.1) 0px 7px 29px 0px;
 }

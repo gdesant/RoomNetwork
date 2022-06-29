@@ -7,48 +7,54 @@
     --success-color: #5bb00a;
 }
 
+*{
+    transition: background-color 0.2s ease;
+}
+
 :root.light{
-    --main-color: #FFA600;
-    --main-color-o75: rgba(255, 166, 0, 0.75);
-    --secondary-color: #d08008;
-    --third-color: #2d3236;
-    --fourth-color: #191e21;
-    --fourth-color-hover: #0f0f10;
-    --fifth-color: #21292c;
+    --mcolor-1: 250, 130, 40;
+    --mcolor-2: 208, 128, 8;
 
-    --icon-color: var(--main-color);
-    --icon-b-color: var(--fourth-color);
-    --icon-color-hover: var(--main-color);
-    --icon-b-color-hover: var(--fourth-color-hover);
-    --icon-color-active: var(--fourth-color);
-    --icon-b-color-active: var(--main-color);
+    --bcolor-1: 235, 235, 235;
+    --bcolor-1-hover: 250, 250, 250;
+    --bcolor-2: 215, 215, 215;
+    --bcolor-3: 225, 225, 225;
 
-    --input-color: var(--white-color);
-    --input-b-color: var(--third-color);
+    --icolor-1: 47, 47, 47;
 
-    --navbar-color: var(--third-color);
+    --icon-color: rgba(var(--mcolor-1), 1);
+    --icon-b-color: rgba(var(--bcolor-1), 1);
+    --icon-color-hover: rgba(var(--mcolor-1), 0.75);
+    --icon-b-color-hover: rgba(var(--bcolor-1-hover), 1);
+    --icon-color-active: rgba(var(--bcolor-1), 1);
+    --icon-b-color-active: rgba(var(--mcolor-1), 1);
+
+    --input-color: rgba(var(--icolor-1), 1);
+    --input-b-color: rgba(var(--bcolor-2), 1);
+
+    --navbar-color: rgba(var(--bcolor-2), 1);
 }
 
 :root.dark{
-    --main-color: #FFA600;
-    --main-color-hover: #ff6200;
-    --main-color-o75: rgba(255, 166, 0, 0.75);
-    --secondary-color: #d08008;
+    --mcolor-1: 255, 166, 0;
+    --mcolor-2: 208, 128, 8;
 
-    --third-color: #20262a;
-    --fourth-color: #191e21;
-    --fourth-color-hover: #15181a;
-    --fifth-color: #21292c;
+    --bcolor-1: 25, 30, 33;
+    --bcolor-1-hover: 21, 24, 26;
+    --bcolor-2: 32, 38, 42;
+    --bcolor-3: 35, 42, 47;
 
-    --icon-color: var(--main-color);
-    --icon-b-color: var(--fourth-color);
-    --icon-color-hover: var(--main-color-o75);
-    --icon-b-color-hover: var(--fourth-color-hover);
-    --icon-color-active: var(--fourth-color);
-    --icon-b-color-active: var(--main-color);
+    --icolor-1: 190,190,180;
 
-    --input-color: var(--white-color);
-    --input-b-color: var(--third-color);
+    --icon-color: rgba(var(--mcolor-1), 1);
+    --icon-b-color: rgba(var(--bcolor-1), 1);
+    --icon-color-hover: rgba(var(--mcolor-1), 0.75);
+    --icon-b-color-hover: rgba(var(--bcolor-1-hover), 1);
+    --icon-color-active: rgba(var(--bcolor-1), 1);
+    --icon-b-color-active: rgba(var(--mcolor-1), 1);
 
-    --navbar-color: var(--third-color);
+    --input-color: rgba(var(--icolor-1), 1);
+    --input-b-color: rgba(var(--bcolor-2), 1);
+
+    --navbar-color: rgba(var(--bcolor-2), 1);
 }

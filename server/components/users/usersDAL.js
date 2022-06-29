@@ -1,5 +1,6 @@
 const { User, Room, RoomRequest, FriendShipRequest, Message } = require('../relations')
 const { Op } = require("sequelize");
+const {fr} = require("faker/lib/locales");
 
 class usersDAL {
     static async get() {
@@ -18,13 +19,12 @@ class usersDAL {
         });
     }
 
-    static async findAllStartWith(name, publicAcc, id) {
+    static async findAllStartWith(name, publicAcc, ids) {
         console.log("\t\tUsersDAL@findAllStartWith");
+
         return await User.findAll({
             where: {
-                id : {
-                    [Op.not]: id,
-                },
+                id : {[Op.notIn]: ids},
                 username:{
                     [Op.startsWith]: name,
                 },
@@ -32,9 +32,10 @@ class usersDAL {
                     [Op.is]: publicAcc,
                 }
             },
-            attributes: ['id', 'username'],
+            attributes: ['id', 'username', 'pp_url'],
             limit: 15,
         })
+
     }
 
     static async getUserFriends(id) {
@@ -47,17 +48,51 @@ class usersDAL {
                 model: User,
                 as: 'FriendSend',
                 attributes: ['id', 'username', 'email'],
-                through:{where: {status: 1}, attributes: []}
+                through:{where: {status: 1}, attributes: []},
+                required: false
             },{
                 model: User,
                 as: 'FriendReceive',
                 attributes: ['id', 'username', 'email'],
-                through: {where: {status: 1}, attributes: []}
+                through: {where: {status: 1}, attributes: []},
+                required: false
             }],
             attributes: [],
         })
         const result = init.toJSON().FriendSend.concat(init.toJSON().FriendReceive)
         return {Friends: result};
+    }
+
+    static async getUserFriend(pid, sid, stat) {
+        console.log("\t\tUsersDAL@getUserFriendById(id: "+pid+", sid: "+  sid +" with status: "+stat+" )");
+        const init = await User.findOne({
+            where:{
+                id: pid,
+            },
+            include: [{
+                model: User,
+                as: 'FriendSend',
+                attributes: ['id', 'username', 'pp_url', 'pp_settings'],
+                where:{id:  sid},
+                through: {where: {status: stat},  attributes: ['status', 'id', 'updatedAt']},
+                required: false,
+            },{
+                model: User,
+                as: 'FriendReceive',
+                attributes: ['id', 'username', 'pp_url', 'pp_settings'],
+                where:{id:  sid},
+                through: {where: {status: stat},  attributes: ['status', 'id', 'updatedAt']},
+                required: false,
+            }],
+            attributes: [],
+        })
+        let index = init.dataValues.FriendSend.findIndex(element =>  element.id == sid)
+        if(index  != -1)
+            return init.dataValues.FriendSend[index]
+        index = init.dataValues.FriendReceive.findIndex(element =>  element.id == sid)
+        if(index  != -1)
+            return init.dataValues.FriendReceive[index]
+        return null;
     }
 
     static async getUserMessages(id) {
@@ -89,40 +124,24 @@ class usersDAL {
             include: [{
                 model: User,
                 as: 'FriendSend',
-                attributes: ['id', 'username', 'pp_url', 'pp_settings'],
+                attributes: ['id', 'username', 'pp_url', 'pp_settings', 'publicAccount', 'publicEmail', 'email'],
                 through: {attributes: ['status', 'id', 'updatedAt']},
                 required: false
             },{
                 model: User,
                 as: 'FriendReceive',
-                attributes: ['id', 'username', 'pp_url', 'pp_settings'],
+                attributes: ['id', 'username', 'pp_url', 'pp_settings', 'publicAccount', 'publicEmail', 'email'],
                 through: {attributes: ['status', 'id', 'updatedAt']},
                 required: false
             },{
                 model: Room,
                 as: 'CreatedRooms',
                 attributes: ['id', 'name', 'type'],
-                where: {
-                    type: {
-                        [Op.ne]: 2,
-                    }
-                },
                 required: false
             },
             {
                 model: Room,
                 as: 'JoinedRooms',
-                where:  {
-                    [Op.and]:[{
-                            ownerId: {
-                                [Op.ne]: id,
-                            }
-                        },{
-                            type: {
-                                [Op.ne]: 2,
-                            }
-                        }]
-                },
                 attributes: ['id', 'name', 'type', 'ownerId'],
                 required: false
             }],

@@ -63,7 +63,7 @@ export default {
 
   background-color: var(--navbar-color);
   transition: background-color 0.1s ease-in-out;
-  z-index: 1;
+  z-index: 6;
   position: absolute;
   top: 0;
   left: 0;
@@ -78,6 +78,7 @@ export default {
   top: 0;
   left: 0;
   overflow: hidden;
+  z-index: 6;
 }
 
 .NavbarMainTop:before {

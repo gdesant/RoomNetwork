@@ -182,19 +182,19 @@ export default {
   margin-top: 15px;
   width: auto;
   border-radius: 50%;
-  border: solid 3px var(--main-color);
+  border: solid 3px rgba(var(--mcolor-1), 1);
 }
 
 
 .openerSideBar{
-  width: 100px;
+  width: 80px;
   height: 60px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-  background: linear-gradient(to top,var(--fourth-color) 50%, var(--main-color) 50%);
+  background: linear-gradient(to top,rgba(var(--bcolor-1), 1) 50%, rgba(var(--mcolor-1), 1) 50%);
   background-size: 200% 200%;
   background-position: center bottom;
-  color: var(--main-color);
+  color: rgba(var(--mcolor-1), 1);
   transition: all 0.1s ease-in-out;
   transition-delay: 0.3s;
 }
@@ -205,7 +205,7 @@ export default {
   width:10px;
   height:96vh;
   content:'';
-  background: linear-gradient(to top, var(--fourth-color) 50%, var(--main-color) 50%);
+  background: linear-gradient(to top, rgba(var(--bcolor-1), 1) 50%, rgba(var(--mcolor-1), 1) 50%);
   background-size: 100% 250%;
   background-position: center bottom;
   transition: all 0.3s ease-in-out;
@@ -215,7 +215,7 @@ export default {
 
 .openerSideBar:hover{
   transition-delay: 0s;
-  color: var(--fourth-color);
+  color: rgba(var(--bcolor-1), 1);
   background-position: center top;
 }
 

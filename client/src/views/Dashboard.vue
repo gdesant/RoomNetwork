@@ -3,7 +3,7 @@
     <div class="dashboardMainContent b-clr-5" v-if="user != null">
       <Transition name="slide-up">
 
-        <contactsContainer v-if="currentEditView == 'contacts' && renderContacts" :contacts="user.Friends" :contactReceive="user.FriendReceive" :contactSend="user.FriendSend" class="emptyDashboardDiv"/>
+        <contactsContainer v-if="currentEditView == 'contacts' && renderContacts" :contacts="user.Friends" :contactReceive="user.FriendReceive" :contactSend="user.FriendSend" :userId="user.id" class="emptyDashboardDiv"/>
         <roomsContainer v-else-if="currentEditView == 'rooms'" class="emptyDashboardDiv"/>
         <addonsContainer v-else-if="currentEditView == 'addons'" class="emptyDashboardDiv"/>
 
@@ -71,6 +71,7 @@ export default {
     this.emitter.on("logout", this.logoutDash);
     this.emitter.on("navbarDashView", this.changeView)
     this.emitter.on("updateFriendRequest",  this.updateFriendRequest)
+    this.emitter.on("addGBAN",  this.addFriendRequestGBAN)
   },
   methods: {
     logoutDash(){
@@ -120,29 +121,43 @@ export default {
       }
     },
     async updateFriendRequest(data){
-      let  buff = await FriendsService.update(data.id, data.status)
-      console.log('Id: ' + data.id + ' | Status: '  +  data.status)
-      console.log('Update: ' + buff)
-      if(buff == false)
+      if(data.oldStatus == data.status)
         return
 
+      let  buff = await FriendsService.update(data.id, data.status)
+
+      console.log('Id: ' + data.id + ' | Status: '  +  data.status + ' | oldStatus :'  + data.oldStatus)
+      console.log('Update: {')
+      console.log(buff)
+      console.log('};')
+
+      if(buff == false)
+        return
 
       let index = this.$data.user.FriendReceive.findIndex(element =>  element.friendsrequests.id == data.id)
       console.log('FriendReceive index: ' + index)
       if(index >= 0){
-        this.$data.user.FriendReceive[index]  =  await FriendsService.getFriendsRequestById(data.id)
+        this.$data.user.FriendReceive[index].friendsrequests = buff
       }
 
       index = this.$data.user.FriendSend.findIndex(element =>  element.friendsrequests.id == data.id)
       console.log('FriendSend index: ' + index)
       if(index >= 0){
-        this.$data.user.FriendSend[index]  = await FriendsService.getFriendsRequestById(data.id)
+        this.$data.user.FriendSend[index].friendsrequests = buff
       }
 
       index = this.$data.user.Friends.findIndex(element =>  element.friendsrequests.id == data.id)
       if(index  != -1 && data.status != 1)
         this.$data.user.Friends.splice(index, 1)
 
+      if(data.oldStatus != 1 && data.status ==  1){
+        const friend = await FriendsService.getUserFriendById(this.$data.user.id == buff.senderId ? buff.senderId : buff.receiverId, this.$data.user.id == buff.senderId ? buff.receiverId : buff.senderId)
+        this.$data.user.Friends.splice(this.$data.user.Friends.lenght, 0, friend)
+      }
+
+    },
+    async addFriendRequestGBAN(data){
+      this.$data.user.FriendSend.splice(this.$data.user.FriendSend.length, 0, data)
     },
     forceRerender() {
       // Remove my-component from the DOM
@@ -226,21 +241,45 @@ export default {
   overflow-y: auto;
   width: 1062px;
   padding: 10px;
-  border: 3px solid var(--main-color);
+  border: 3px solid rgba(var(--mcolor-1), 1);
 }
 
 .emptyDashPanelMain::-webkit-scrollbar{
-  background-color: var(--fourth-color);
+  background-color: rgba(var(--bcolor-1), 1);
   padding-left: 3px;
 }
 
 .emptyDashPanelMain::-webkit-scrollbar-thumb{
-  background-color: var(--main-color);
-  border-top: 2px solid var(--fourth-color);
-  border-right: 2px solid var(--fourth-color);
-  border-bottom: 2px solid var(--fourth-color);
+  background-color: rgba(var(--mcolor-1), 1);
+  border-top: 2px solid rgba(var(--bcolor-1), 1);
+  border-right: 2px solid rgba(var(--bcolor-1), 1);
+  border-bottom: 2px solid rgba(var(--bcolor-1), 1);
 
 }
+
+.emptyDashPanelSec{
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 1062px;
+  padding: 10px;
+  border: 3px solid rgba(var(--mcolor-1), 1);
+  color: var(--mcolor-1);
+}
+
+.emptyDashPanelSec::-webkit-scrollbar{
+  background-color: rgba(var(--bcolor-1), 1);
+  padding-left: 3px;
+}
+
+.emptyDashPanelSec::-webkit-scrollbar-thumb{
+  background-color: rgba(var(--mcolor-1), 1);
+  border-top: 2px solid rgba(var(--bcolor-1), 1);
+  border-right: 2px solid rgba(var(--bcolor-1), 1);
+  border-bottom: 2px solid rgba(var(--bcolor-1), 1);
+
+}
+
+
 
 .emptyDashPanel{
   display: block;

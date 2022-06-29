@@ -1,53 +1,53 @@
 /*#region Color*/
 .clr-1{
-    color:     var(--main-color);
+    color:     rgba(var(--mcolor-1), 1);
 }
 
 .clr-2{
-    color:     var(--secondary-color);
+    color:     rgba(var(--mcolor-2), 1);
 }
 
 .clr-3{
-    color:     var(--third-color);
+    color:     rgba(var(--bcolor-2), 1);
 }
 
 .clr-4{
-    color:     var(--fourth-color);
+    color:     rgba(var(--bcolor-1), 1);
 }
 
 .clr-5{
-    color:     var(--fifth-color);
+    color:     rgba(var(--bcolor-3), 1);
 }
 
 
 .clr-wht{
-    color:     var(--white-color);
+    color:     rgba(var(--icolor-1), 1);
 }
 /*#endregion*/
 
 /*#region Background*/
 .b-clr-1{
-    background-color:     var(--main-color);
+    background-color:     rgba(var(--mcolor-1), 1);
 }
 
 .b-clr-2{
-    background-color:     var(--secondary-color);
+    background-color:     rgba(var(--mcolor-2), 1);
 }
 
 .b-clr-3{
-    background-color:     var(--third-color);
+    background-color:     rgba(var(--bcolor-2), 1);
 }
 
 .b-clr-4{
-    background-color:     var(--fourth-color);
+    background-color:     rgba(var(--bcolor-1), 1);
 }
 
 .b-clr-5{
-    background-color:     var(--fifth-color);
+    background-color:     rgba(var(--bcolor-3), 1);
 }
 
 .b-clr-wht{
-    background-color:     var(--white-color);
+    background-color:     rgba(var(--icolor-1), 1);
 }
 
 

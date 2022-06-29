@@ -22,9 +22,11 @@ class UsersService {
         }
     }
 
-    static async getUsersStartWith(name: string, id: number | string) {
+    static async getUsersStartWith(name: string, id: number) {
         try {
-            const res = await axios.get( url + "/users/all/sw/" + name + "/" + id);
+            const res = await axios.get( url + "/users/all/sw/" + name + '/' + id);
+            console.log('getUserStartWith  :')
+            console.log(res)
             return res.data
         } catch (err) {
             return err

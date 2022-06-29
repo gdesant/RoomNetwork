@@ -205,7 +205,7 @@ export default {
   padding: 1%;
   padding: 1% 0 1% 1%;
   padding-right: 0;
-  background-color: var(--fifth-color);
+  background-color: rgba(var(--bcolor-3), 1);
   list-style-type: none;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -213,7 +213,7 @@ export default {
 
 .alertDiv li{
   padding-left: 0;
-  color: var(--white-color);
+  color: rgba(var(--icolor-1), 1);
 }
 
 .fade-enter-active, .fade-leave-active {

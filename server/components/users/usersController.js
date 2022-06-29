@@ -11,29 +11,11 @@ class UsersController {
 
 
 
-    static async getUsersStartWith(name, userId) {
-        Object.size = function(obj) {
-            var size = 0,
-                key;
-            for (key in obj) {
-                if (obj.hasOwnProperty(key)) size++;
-            }
-            return size;
-        };
-
+    static async getUsersStartWith(name, uId) {
         console.log("\tUserController@findStartWith");
+        const jokes = await usersDAL.findAllStartWith(name, true, uId)
 
-        const jokes = await usersDAL.findAllStartWith(name, true, userId)
-        const Users = []
-
-        for(let i = -1; ++i < Object.size(jokes);){
-            let stat = await friendsRequestDAL.getUserHaveLink(userId, jokes[i].id)
-            console.log(stat)
-            if (stat < 0 && jokes[i].id !== userId)
-                Users[Users.length] = jokes[i];
-        }
-
-        return Users;
+        return jokes;
     }
 
     static async getUserById(id, attributes) {
@@ -51,11 +33,26 @@ class UsersController {
     }
 
     static async getUserFriends(id) {
-        console.log("\tUserController@getUserById");
+        console.log("\tUserController@getUserFriends");
         const User = await usersDAL.getUserFriends(id);
         return User;
 
     }
+
+    static async getUserFriend(pid, sid, stat) {
+        console.log("\tUserController@getUserFriend");
+        let User = null;
+
+        if (!isNaN(stat))
+            User = await usersDAL.getUserFriend(pid, sid, stat);
+        else
+            User = await usersDAL.getUserFriend(pid, sid, 1);
+
+        return User;
+
+    }
+
+    getUserFriend
 
     static async getUserMessages(id) {
         console.log("\tUserController@getUserById");

@@ -6,6 +6,7 @@ const usersController = require("../users/usersController");
 const friendsController = require("../friendship/friendsController");
 const messagesController = require("../message/messageController");
 const io = require('../socketio').get()
+const auth = require('../authFunc')
 
 //#region Messages
 
@@ -38,32 +39,37 @@ router.post("/msg/neR", async function(req, res) {
 
 //#region Users
 //Private users data
-router.get("/users/dash/:id", async function(req, res) {
+router.get("/users/dash/:id", auth.authenticateToken, async function(req, res) {
     let result = await usersController.getUserDashboardById(req.params.id);
     res.send(result);
 });
 
-router.get("/users/:id", authenticateToken, async function(req, res) {
+router.get("/users/:id", auth.authenticateToken, async function(req, res) {
     let result = await usersController.getUserById(req.params.id, ['id', 'username' ,'email']);
     res.send(result);
 });
 
-router.get("/users/:id/friends", authenticateToken, async function(req, res) {
+router.get("/users/:id/friends", auth.authenticateToken, async function(req, res) {
     let result = await usersController.getUserFriends(req.params.id);
     res.send(result);
 });
 
-router.get("/users/:id/friendsent", authenticateToken, async function(req, res) {
+router.get("/users/:pid/friend/:sid/:stat?", auth.authenticateToken, async function(req, res) {
+    let result = await usersController.getUserFriend(req.params.pid, req.params.sid, req.params.stat);
+    res.send(result);
+});
+
+router.get("/users/:id/friendsent", auth.authenticateToken, async function(req, res) {
     const result = await friendsController.getUserFriendRequestsSent(req.params.id);
     res.send(result);
 });
 
-router.get("/users/:id/friendreceived", authenticateToken, async function(req, res) {
+router.get("/users/:id/friendreceived", auth.authenticateToken, async function(req, res) {
     const result = await friendsController.getUserFriendRequestsReceived(req.params.id);
     res.send(result);
 });
 
-router.get('/users/:id/friendreceived/:status', authenticateToken, async function(req, res)  {
+router.get('/users/:id/friendreceived/:status', auth.authenticateToken, async function(req, res)  {
     const result = await friendsController.getUserFriendRequestsReceivedbyStatus(req.params.id, req.params.status);
     res.send(result);
 })
@@ -83,7 +89,7 @@ router.post("/register", async function(req, res) {
     }
 });
 
-router.post("/update/:id", authenticateToken, async function(req, res) {
+router.post("/update/:id", auth.authenticateToken, async function(req, res) {
     console.log('Access Update !')
     console.log(req);
     req.body.id = req.params.id
@@ -99,12 +105,12 @@ router.post("/update/:id", authenticateToken, async function(req, res) {
     }
 });
 
-router.get("/verify", authenticateToken, async function(req, res ) {
+router.get("/verify", auth.authenticateToken, async function(req, res ) {
     let result = await authController.verify(req);
     res.send(result);
 });
 
-router.post("/logout", authenticateToken, async function(req, res ) {
+router.post("/logout", auth.authenticateToken, async function(req, res ) {
     let result = await authController.logout(req.body);
     if(!result) {
         res.send(false)
@@ -122,21 +128,6 @@ router.post("/login", async function(req, res) {
         res.status(404).send('Username or password is invalid')
 });
 //#endregion
-
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]
-    if (token == null || token == undefined) return res.sendStatus(401)
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        if (err) {
-            console.log(err)
-            return res.sendStatus(403)
-        }
-        req.user = user
-        req.token = token
-        next()
-    })
-}
 
 module.exports = router
 

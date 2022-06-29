@@ -81,24 +81,33 @@ class friendsRequestDAL{
 
     static async update(updateClause, whereClause) {
         console.log("\t\tFriendsRequestDAL@update");
-        return await FriendShipRequest.update(updateClause, {
+        await FriendShipRequest.update(updateClause, {
             where: whereClause
         });
+        return this.findOne(whereClause)
     }
 
-    static async destroy(id) {
-        console.log("\t\tFriendsRequestDAL@update");
+    static async destroy(data) {
+        console.log("\t\tFriendsRequestDAL@destroy");
         return await FriendShipRequest.destroy({
-            id: id
+            where: {
+                [Op.and]: [
+                    {
+                        id: data.body.id
+                    }, {
+                        senderId: data.userData.id
+                    }
+                ]
+            }
         });
     }
 
-    static async create(sender, receiver) {
+    static async create(sender, receiver, gban) {
         console.log("\t\tFriendsRequestDAL@create");
         return await FriendShipRequest.create({
             senderId: sender.id,
             receiverId: receiver.id,
-            status: 0,
+            status: gban,
         });
     }
 }

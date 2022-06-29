@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const roomRequestsController = require("./roomRequestsController");
 const jwt =require('jsonwebtoken')
+const auth = require('../../authFunc')
 
 router.get("/", async function(req, res) {
     let result = await roomRequestsController.getRooms();
@@ -13,7 +14,7 @@ router.get("/id/:id", async function(req, res) {
     res.send(result);
 });
 
-router.post("/changeStatus", authenticateToken, async function(req, res) {
+router.post("/changeStatus", auth.authenticateToken, async function(req, res) {
     console.log('Access Register !')
     let result = await roomRequestsController.changeMemberStatus(req.body);
     if(result === 400) {
@@ -25,7 +26,7 @@ router.post("/changeStatus", authenticateToken, async function(req, res) {
     }
 });
 
-router.post("/create", authenticateToken, async function(req, res) {
+router.post("/create", auth.authenticateToken, async function(req, res) {
     console.log('Access Register !')
     let result = await roomRequestsController.createRoom(req.body, req.user);
     if(result === 400) {
@@ -36,20 +37,5 @@ router.post("/create", authenticateToken, async function(req, res) {
         res.send(result);
     }
 });
-
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'] ? req.headers['authorization'] : null
-    const token = authHeader && authHeader.split(' ')[1]
-
-    if (token == null) return res.sendStatus(401)
-
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        console.log(err)
-        if (err) return res.sendStatus(403)
-        req.user = user
-        next()
-    })
-}
-
 
 module.exports = router;

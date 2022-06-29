@@ -1,23 +1,48 @@
 <template>
   <div class="emptyDashPanelMain hp90 mip0a b-clr-3">
-    <div v-for="contact in  contacts" v-bind:key="contact.id" class="emptyDashPanel contactCard b-clr-4">
-      <div class="mainCard">
-        <div class="contactCardImg"><img v-bind:src="contact.pp_url" width="100" height="100"></div>
-        <div class="contactCardName"><h2>{{contact.username}}</h2></div>
+    <transition-group name="contactGridTran">
+      <div v-for="contact in  contactsB" v-bind:key="contact.id" class="emptyDashPanel contactCard b-clr-4">
+        <div class="mainCard">
+          <div class="contactCardImg"><img v-bind:src="contact.pp_url" width="100" height="100"></div>
+          <div class="contactCardName"><h2>{{contact.username}}</h2></div>
+        </div>
+        <div class="statusFriendDiv removeFriendDiv table pe-auto" @click="changeStatus({status: 0, contact: contact, modalACK: false})">
+          <div class="table-c">
+            <fa icon="eject"></fa>
+          </div>
+        </div>
+        <div class="hoverDiv removeHoverDiv"><h5>UNBAN  CONTACT</h5></div>
+        <div class="statusFriendDiv addFriendDiv table pe-auto" @click="changeStatus({status: 1, contact: contact, modalACK: false})">
+          <div class="table-c">
+            <fa icon="check"></fa>
+          </div>
+        </div>
+        <div class="hoverDiv addHoverDiv"><h5>ADD AS FRIEND</h5></div>
       </div>
-      <div  class="statusFriendDiv removeFriendDiv table pe-auto" @click="changeStatus({status: 0, contact: contact, modalACK: true})">
-        <div class="table-c">
-          <fa icon="eject"></fa>
+      <div v-for="contact in  contactsGB" v-bind:key="contact.id" class="emptyDashPanel contactCard b-clr-4">
+        <div class="mainCard">
+          <div class="contactCardImg"><img v-bind:src="contact.pp_url" width="100" height="100"></div>
+          <div class="contactCardName"><h2>{{contact.username}}</h2></div>
+        </div>
+        <div class="statusFriendDiv removeFriendDiv table pe-auto" @click="changeStatus({status: -1, contact: contact, modalACK: false})">
+          <div class="table-c">
+            <fa icon="eject"></fa>
+          </div>
+        </div>
+        <div class="hoverDiv removeHoverDiv"><h5>UNGBAN  CONTACT</h5></div>
+        <div class="statusFriendDiv addFriendDiv table pe-auto" @click="changeStatus({status: 0, contact: contact, modalACK: false})">
+          <div class="table-c">
+            <fa icon="check"></fa>
+          </div>
+        </div>
+        <div class="hoverDiv addHoverDiv"><h5>SEND REQUEST</h5></div>
+        <div class="table statusFriendDiv ghostBan ">
+          <div class="table-c clr-2">
+            <fa icon="ghost"></fa>
+          </div>
         </div>
       </div>
-      <div  class="hoverDiv removeHoverDiv"><h5>UNBAN  CONTACT</h5></div>
-      <div  class="statusFriendDiv addFriendDiv table pe-auto" @click="changeStatus({status: 1, contact: contact, modalACK: false})">
-        <div class="table-c">
-          <fa icon="check"></fa>
-        </div>
-      </div>
-      <div  class="hoverDiv addHoverDiv"><h5>ADD AS FRIEND</h5></div>
-    </div>
+    </transition-group>
   </div>
 </template>
 
@@ -25,12 +50,15 @@
 export default {
   name: "ContactsAddGridContainer",
   props: {
-    contacts: Object,
+    contactsGB: Object,
+    contactsB: Object,
     changeStatus: Function,
+    searchInput: String,
   },
   created() {
-    console.log(this.$props.contacts)
-  }
+    console.log(this.$props.contactsB)
+    console.log(this.$props.contactsGB)
+  },
 }
 </script>
 
@@ -84,7 +112,7 @@ export default {
   height: 100px;
   margin-inline: auto;
   padding-left: 10px;
-  color: var(--main-color);
+  color: rgba(var(--mcolor-1), 1);
 }
 
 /*#region statusFriendsDiv*/
@@ -106,7 +134,7 @@ export default {
   max-width: 135px;
   height: 25px;
   top:30px;
-  background-color: var(--third-color);
+  background-color: rgba(var(--bcolor-2), 1);
   border-radius: 2px;
   transition: 0.2s all ease-in-out;
   z-index: 0;
@@ -133,7 +161,7 @@ export default {
   transform: scale(1.3);
 }
 
-/*#endregion Remove*/
+/*#endregion*/
 
 
 /*#region Remove*/
@@ -156,29 +184,16 @@ export default {
   transform: scale(1.3);
 }
 
-/*#endregion Remove*/
+/*#endregion*/
 
 /*#region Ban*/
-.banFriendDiv{
-  color: rgba(215, 48, 33, 0.7);
-  right: 0px;
+.ghostBan{
+  top: 0px;
+  left: 0px;
 }
 
-.banHoverDiv{
-  color: rgba(215, 48, 33, 1);
-  right: 0px;
-}
 
-.banFriendDiv:hover + .hoverDiv{
-  opacity: 0.85;
-}
-
-.banFriendDiv:hover{
-  color: rgba(215, 48, 33, 1);
-  transform: scale(1.3);
-}
-
-/*#endregion Remove*/
+/*#endregion*/
 
 
 /*#endregion*/

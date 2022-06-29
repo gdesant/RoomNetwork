@@ -1,6 +1,7 @@
 <template>
   <div class="emptyDashPanelMain hp90 mip0a b-clr-3">
-    <div v-for="contact in  contacts" v-bind:key="contact.id" class="emptyDashPanel contactCard b-clr-4">
+    <transition-group name="contactGridTran">
+      <div v-for="contact in  contacts.filter(x=> x.username.includes(searchInput))" v-bind:key="contact.id" class="emptyDashPanel contactCard b-clr-4">
       <div class="mainCard">
         <div class="contactCardImg"><img v-bind:src="contact.pp_url" width="100" height="100"></div>
         <div class="contactCardName"><h2>{{contact.username}}</h2></div>
@@ -30,6 +31,7 @@
       </div>
       <div  class="hoverDiv addHoverDiv"><h5>ADD AS FRIEND</h5></div>
     </div>
+    </transition-group>
   </div>
 </template>
 
@@ -39,6 +41,7 @@ export default {
   props: {
     contacts: Object,
     changeStatus: Function,
+    searchInput: String,
   },
   created() {
     console.log(this.$props.contacts)
@@ -96,7 +99,7 @@ export default {
   height: 100px;
   margin-inline: auto;
   padding-left: 10px;
-  color: var(--main-color);
+  color: rgba(var(--mcolor-1), 1);
 }
 
 /*#region statusFriendsDiv*/
@@ -118,10 +121,11 @@ export default {
   max-width: 135px;
   height: 25px;
   top:30px;
-  background-color: var(--third-color);
+  background-color: rgba(var(--bcolor-2), 1);
   border-radius: 2px;
   transition: 0.2s all ease-in-out;
   z-index: 0;
+  pointer-events: none;
 }
 
 /*#region Add*/
@@ -138,6 +142,7 @@ export default {
 .addFriendDiv:hover + .hoverDiv{
   opacity: 0.85;
   z-index: 2;
+  pointer-events: auto;
 }
 
 .addFriendDiv:hover{
@@ -145,7 +150,7 @@ export default {
   transform: scale(1.3);
 }
 
-/*#endregion Remove*/
+/*#endregion*/
 
 
 /*#region Remove*/
@@ -168,7 +173,7 @@ export default {
   transform: scale(1.3);
 }
 
-/*#endregion Remove*/
+/*#endregion*/
 
 /*#region Ban*/
 .banFriendDiv{
@@ -190,7 +195,7 @@ export default {
   transform: scale(1.3);
 }
 
-/*#endregion Remove*/
+/*#endregion*/
 
 /*#region Archive*/
 .archiveFriendDiv{
@@ -212,7 +217,7 @@ export default {
   transform: scale(1.3);
 }
 
-/*#endregion Remove*/
+/*#endregion*/
 
 
 /*#endregion*/

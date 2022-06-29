@@ -29,7 +29,7 @@ export default {
       this.emitter.emit('closeModal')
     },
     async changeStatus(){
-      this.emitter.emit('updateFriendRequest', {id: this.$props.modalData.contact.friendsrequests.id  , status: this.$props.modalData.status})
+      this.emitter.emit('updateFriendRequest', {id: this.$props.modalData.contact.friendsrequests.id  , status: this.$props.modalData.status, oldStatus: this.$props.modalData.contact.friendsrequests.status})
       this.closeModal()
     }
   },

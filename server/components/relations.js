@@ -46,6 +46,18 @@ User.prototype.getPrivateRooms = async function (attribute, includes) {
     return await this.getJoinedRooms({where: {type: 2}, attributes: attribute, include: includes,})
 };
 
+User.prototype.getStartWith =  async function (){
+    const  fr = await this.getFriendReceive({attributes: ['id']})
+    const  fs = await this.getFriendSend({attributes: ['id']})
+    const   ids  =  []
+    for(let i = 0; i < fr.length; i++)
+        ids.push(fr[i].getDataValue('id'))
+    for(let i = 0; i < fs.length; i++)
+        ids.push(fs[i].getDataValue('id'))
+    ids.push(this.getDataValue('id'))
+    return ids
+}
+
 User.prototype.getPrivateRoomWith = async function(id, attribute, include){
     const rooms = await this.getPrivateRooms(attribute, include);
 
@@ -145,7 +157,7 @@ async function initSequelize() {
 }
 //#endregion
 
-initSequelize()
+//initSequelize()
 
 
 module.exports = { User, Room, RoomRequest, FriendShipRequest, Message, Addon };

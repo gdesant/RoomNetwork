@@ -1,19 +1,19 @@
 <template>
   <div class="fx-cr chatsIconsDiv">
-    <div class="table chatAddIco b-clr-1">
+    <div class="table chatAddIco pe-auto b-clr-1">
       <div class="table-c">
         <fa  size="xl"  icon="plus"/>
       </div>
     </div>
     <transition-group name="listIco">
-      <div v-for="chat in sidedChats" :key="chat.name" class="table chatAddIco chatSideIco b-clr-1">
+      <div v-for="chat in sidedChats" :key="chat.name" class="table chatAddIco chatSideIco b-clr-1 pe-auto">
         <div class="table-c pe-auto " @click="sideChat(chat)">
           <img class="chatImg" height="55" width="55" :src="chat.url">
         </div>
       </div>
     </transition-group>
 
-    <div class="table chatAddIco chatSettIco b-clr-1">
+    <div class="table chatAddIco chatSettIco pe-auto b-clr-1">
       <div class="table-c">
         <fa  icon="ellipsis"/>
       </div>
@@ -23,7 +23,7 @@
     <div class="fx-rr chatPotDiv">
       <transition-group name="list">
         <div  class="chatPop list-item"  :class="[chat.isMinus == true ? 'downChatPop'  : '', chat.isSided == true ? 'sideChat' : '']" v-for="chat in chats" :key="chat.name" v-on:load="updateChatInputRatio(chat.name)" ref="chats">
-          <div class="fx-r wp100 hp10" style="background-color: var(--main-color);text-align: center">
+          <div class="fx-r wp100 hp10" style="background-color: rgba(var(--mcolor-1), 1);text-align: center">
             <div class="wp70 hp100 tal">
               <h3  class="pop00 mop00 mlp25">{{chat.name}}</h3>
             </div>
@@ -59,7 +59,7 @@
                 <h4 style="padding: 10%">Send a message to initiate the conversation !</h4>
               </div>
             </div>
-            <div :ref="'MessagesInputContainer_' + chat.name" class="fx-r wp100 b-clr-1" style="border-top: 3px solid var(--main-color); height: initial">
+            <div :ref="'MessagesInputContainer_' + chat.name" class="fx-r wp100 b-clr-1" style="border-top: 3px solid rgba(var(--mcolor-1), 1); height: initial">
               <div class="wp90 mrp10" style="height: initial;">
                 <textarea :ref="'MessagesInput_' + chat.name" class="wp100 clr-wht transition02 taMsg" v-model="chat.textInput" v-on:load="updateChatInputRatio(chat.name)" v-on:keydown.enter.ctrl="sendMessage(chat)" v-on:input="updateChatInputRatio(chat.name)" v-on:focusin="updateChatInputRatio(chat.name)" type="text" maxlength="250"></textarea>
               </div>
@@ -276,20 +276,20 @@ export default {
   width: 90%;
   padding-left: 2.5%;
   padding-right: 7.5%;
-  background-color: var(--fourth-color);
+  background-color: rgba(var(--bcolor-1), 1);
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 .messagesContainer::-webkit-scrollbar{
-  background-color: var(--third-color);
+  background-color: rgba(var(--bcolor-2), 1);
 }
 
 .messagesContainer::-webkit-scrollbar-thumb{
-  background-color: var(--main-color);
-  border-top: 2px solid var(--fourth-color);
-  border-right: 2px solid var(--fourth-color);
-  border-bottom: 2px solid var(--fourth-color);
+  background-color: rgba(var(--mcolor-1), 1);
+  border-top: 2px solid rgba(var(--bcolor-1), 1);
+  border-right: 2px solid rgba(var(--bcolor-1), 1);
+  border-bottom: 2px solid rgba(var(--bcolor-1), 1);
 }
 
 .messageDiv{
@@ -297,40 +297,50 @@ export default {
   height: initial;
   padding: 5px 4px;
   margin: 10px 0;
-  color: var(--white-color);
+  color: rgba(var(--icolor-1), 1);
   word-wrap: break-word;
   display:flex;
 }
 
 .selfMsg{
-  background-color: var(--secondary-color);
+  background-color: rgba(var(--mcolor-2), 1);
   padding-right: 25px;
   margin-left: 25px;
 }
 
 .otherMsg{
-  background-color: var(--third-color);
+  background-color: rgba(var(--bcolor-2), 1);
   padding-left: 25px;
   margin-left: -25px;
 }
 
 
 .mainChatPop{
-  height: 406px;
+  max-height: 406px;
+
+  height: initial;
+  max-width:85vw;
   width: auto;
   display: flex;
   flex-direction: row-reverse;
-  overflow-x: visible;
   position: absolute;
   bottom: 0px;
   right: 125px;
-  overflow: hidden;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  z-index: 5;
   pointer-events: none;
 }
 
+.mainChatPop::-webkit-scrollbar{
+  display: none;
+}
+
 .chatPotDiv{
-  width: inherit;
-  height: 100%;
+  max-height: 406px;
+  height: initial;
+  pointer-events: none;
+  position: relative;
   z-index: 0;
 }
 
@@ -343,11 +353,12 @@ export default {
   flex-direction: column;
   margin-right: 15px;
   padding: 0;
-  background-color: var(--main-color);
+  background-color: rgba(var(--mcolor-1), 1);
   border: 3px solid transparent;
   transition: all 0.3s ease-in-out;
-  transform: translateX(0) translateY(0);
+  margin-top: 0;
   z-index: 0;
+  opacity: 1;
 }
 
 
@@ -357,7 +368,8 @@ export default {
 }
 
 .downChatPop{
-  transform: translateY(89%);
+  margin-top: 365px;
+  width: 150px;
 }
 
 .chatsIconsDiv{
@@ -368,6 +380,7 @@ export default {
   right: 15px;
   z-index: 0;
   background-color: transparent;
+  pointer-events: none;
 }
 
 .chatAddIco{
@@ -420,11 +433,10 @@ export default {
 }
 
 .taMsg{
-
   resize: none;
   outline: none;
   border-radius: 4px;
-  background-color: var(--third-color);
+  background-color: rgba(var(--bcolor-2), 1);
   border: 1px solid;
   border-color: transparent;
   font-family: 'Akshar', sans-serif;
@@ -433,8 +445,8 @@ export default {
 }
 
 .taMsg:focus{
-  border-color: var(--secondary-color);
-  background-color: var(--fourth-color);
+  border-color: rgba(var(--mcolor-2), 1);
+  background-color: rgba(var(--bcolor-1), 1);
 }
 
 .taMsg::-webkit-scrollbar{

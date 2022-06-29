@@ -1,14 +1,14 @@
 input{
     padding-left: 1%;
-    border: 3px solid var(--third-color);
+    border: 3px solid rgba(var(--bcolor-2), 1);
     outline: none;
-    background: var(--third-color);
-    color: var(--main-color);
+    background: rgba(var(--bcolor-2), 1);
+    color: rgba(var(--mcolor-1), 1);
 }
 
 stand:not input:invalid {
-    background: var(--third-color);
-    color: var(--main-color);
+    background: rgba(var(--bcolor-2), 1);
+    color: rgba(var(--mcolor-1), 1);
 }
 
 stand:not input:focus{
@@ -26,8 +26,8 @@ input:-webkit-autofill:active{
 
 stand:not input:-webkit-autofill{
     -webkit-background-clip: text;
-    -webkit-text-fill-color: var(--main-color);
-    background-color: var(--third-color);
+    -webkit-text-fill-color: rgba(var(--mcolor-1), 1);
+    background-color: rgba(var(--bcolor-2), 1);
 }
 
 

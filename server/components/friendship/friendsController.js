@@ -44,7 +44,7 @@ class FriendsController {
         console.log(req.user)
         const fr = await friendsRequestDAL.update( {status: req.body.status}, {
             id: req.body.id,
-            [Op.or]: [{senderId: req.user.id}, {receiverId: req.user.id}]
+            [Op.or]: [{senderId: req.userData.id}, {receiverId: req.userData.id}]
         })
         return fr
     }
@@ -53,7 +53,7 @@ class FriendsController {
         console.log("\tUserController@approveFriendRequest");
         let fr = await friendsRequestDAL.findOne( {
             id: req.body.id,
-            receiverId: req.user.id
+            receiverId: req.userData.id
         })
 
         if(fr !== null)
@@ -69,12 +69,9 @@ class FriendsController {
         return fr
     }
 
-    static async cancelFriendRequest(req){
+    static async cancelFriendRequest(data){
         console.log("\tUserController@cancelFriendRequest");
-        let fr = await friendsRequestDAL.destroy( {
-            id: req.body.id,
-            senderId: req.user.id
-        })
+        let fr = await friendsRequestDAL.destroy(data)
         return fr
     }
 
@@ -82,7 +79,7 @@ class FriendsController {
         console.log("\tUserController@refuseFriendRequest");
         let fr = await friendsRequestDAL.findOne( {
             id: req.body.id,
-            receiverId: req.user.id
+            receiverId: req.userData.id
         })
 
         if(fr !== null)
@@ -92,10 +89,11 @@ class FriendsController {
 
     static async createFriendRequest(req) {
         console.log("\tUserController@createFriendRequest");
-        const sender = req.user
+        const sender = req.userData
         const receiver = await usersDAL.findOne({id : req.body.receiverId}, ["id", "username", "email"])
-        console.log("Create a frienship beetween " + sender.id + " and " + receiver.id + " !")
-        const fr = await friendsRequestDAL.create(sender, receiver)
+        const gban = (req.body.gban == true ? 4 : 0)
+        console.log("Create a " + (gban == 4  ?  "ghostban" : "friendrequest")  + " from " + sender.id + " to " + receiver.id + " !")
+        const fr = await friendsRequestDAL.create(sender, receiver, gban)
         return fr
 
     }
